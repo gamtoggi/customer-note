@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+  <div class="box form-box has-text-centered">
+    <h2 class="subtitle">회원 가입</h2>
+
+    {% if form.errors %}
+    <div class="notification is-danger">
+      <button class="delete"></button>
+      {% for key, value in form.errors.items %}
+      <p>{{ key }}: {{ value }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <!-- {{ form.as_p }} -->
+      <!-- ID -->
+      <div class="field has-text-left">
+        <label class="label">ID</label>
+        <div class="control">
+          <input class="input" type="text" name="username" required autofocus>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field has-text-left">
+        <label class="label">비밀번호</label>
+        <div class="control">
+          <input class="input" type="password" name="password1" required>
+        </div>
+      </div>
+
+      <!-- Password2 -->
+      <div class="field has-text-left">
+        <label class="label">비밀번호 확인</label>
+        <div class="control">
+          <input class="input" type="password" name="password2" required>
+        </div>
+      </div>
+
+      <!-- Login button -->
+      <button type="submit" class="button is-primary">로그인</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

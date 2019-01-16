@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+  <div class="box form-box has-text-centered">
+    <h2 class="subtitle">로그인</h2>
+
+    {% if form.errors %}
+    <div class="notification is-danger">
+      <button class="delete"></button>
+      존재하지 않는 ID 이거나, 비밀번호가 다릅니다.
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <!-- ID -->
+      <div class="field has-text-left">
+        <label class="label">ID</label>
+        <div class="control">
+          <input class="input" type="text" name="username" required autofocus>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field has-text-left">
+        <label class="label">비밀번호</label>
+        <div class="control">
+          <input class="input" type="password" name="password" required>
+        </div>
+      </div>
+
+      <!-- Login button -->
+      <button type="submit" class="button is-primary">로그인</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

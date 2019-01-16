@@ -1,0 +1,12 @@
+section {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-box {
+  width: 500px;
+  max-width: 500px;
+}
