@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mainbox">
+  <div class="containerbox vborder">
+
+    <!-- Top -->
+    <div class="columns is-mobile">
+      <!-- Search Bar -->
+      <div class="column is-mobile">
+        <form action="">
+          <div class="field">
+            <div class="control has-icons-left">
+              <input type="search" class="input is-rounded" placeholder="이름, 주소, 메모...">
+              <span class="icon is-left">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <!-- Sorting button -->
+      <div class="column is-narrow">
+        <button class="button">
+          <span class="icon is-left">
+            <i class="fas fa-ellipsis-h"></i>
+          </span>
+        </button>
+      </div>
+    </div><!-- end Top -->
+
+    <!-- Add Customer -->
+    <div class="padding10box">
+      <div class="container">
+        <a href="" class="has-text-weight-bold">+ 고객 추가</a>
+        <p><small class="has-text-grey">총 0 명</small></p>
+      </div>
+
+      <!-- help message -->
+      <div class="helpbox has-text-centered">
+        <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+        <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
+        <p class="has-text-grey-light is-size-7">나의 고객을 추가하고, 고객 관리를 시작하세요!</p>
+      </div>  
+    </div>
+
+
+  </div>
+</div>
+
+
+{% endblock %}

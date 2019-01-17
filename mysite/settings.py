@@ -38,12 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'customers.apps.CustomersConfig',
 ]
 
 # custom user model for auth :
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'customers:index'
 LOGOUT_REDIRECT_URL = 'home'
 
 MIDDLEWARE = [

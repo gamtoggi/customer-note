@@ -25,7 +25,7 @@
 
       <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item">
+          <a class="navbar-item" href="{% url 'customers:index' %}">
             고객관리
           </a>
 
@@ -64,10 +64,11 @@
       </div>
     </nav>
 
-    <div class="container">
+
+    <main class="container">
       {% block content %}
       {% endblock %}
-    </div>
+    </main>
 
     <sctip src="{% static 'js/vue.js' %}"></sctip>
     {% block script %}

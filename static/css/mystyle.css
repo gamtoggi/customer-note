@@ -1,4 +1,9 @@
-section {
+html, body, main {
+  height: 100%;
+  background-color: #f7f7f7;
+}
+
+.mainbox {
   display: flex;
   height: 100%;
   width: 100%;
@@ -6,7 +11,37 @@ section {
   justify-content: center;
 }
 
+.vborder {
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+
 .form-box {
   width: 500px;
   max-width: 500px;
+}
+
+.containerbox {
+  width: 580px;
+  max-width: 580px;
+  background-color: white;
+  padding: 15px;
+  height: 100%;
+}
+
+.padding10box {
+  padding: 10px;
+}
+
+/* a {
+  color: black;
+} */
+
+.helpbox {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.helpicon {
+  margin-bottom: 20px;
 }
