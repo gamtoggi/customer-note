@@ -31,10 +31,12 @@
     </div><!-- end Top -->
 
     <!-- Add Customer -->
-    <div class="padding10box">
+    <div id="add-customer" class="padding10box">
       <div class="container">
-        <a href="" class="has-text-weight-bold">+ 고객 추가</a>
+        <a class="has-text-weight-bold" @click="showForm">+ 고객 추가</a>
         <p><small class="has-text-grey">총 0 명</small></p>
+        <!-- Modal -->
+        <div v-html="modalHtml"></div>
       </div>
 
       <!-- help message -->
@@ -46,8 +48,31 @@
     </div>
 
 
+
   </div>
 </div>
 
 
+{% endblock %}
+
+{% block script %}
+<script>
+  new Vue({
+    el: '#add-customer',
+    delimiters: ['[[', ']]'],
+    data: {
+      modalHtml: '',
+    },
+    methods: {
+      showForm() {
+        var self = this;
+        axios.get('{% url "customers:create" %}')
+        .then(function(response){
+          console.log(response.data.html);
+          self.modalHtml = response.data.html;
+        });
+      }
+    }
+  });
+</script>
 {% endblock %}
