@@ -41,4 +41,35 @@ $(function(){
     return false;
   });
 
+  // Show customer detail page
+  $('#page-container').on('click', '.customer-list-item', function(){
+    var pk = $(this).attr('data-customer-id');
+
+    $.ajax({
+      url: '/customers/' + pk,
+      type: 'get',
+      dataType: 'json',
+      success: function(data){
+        $('#page-container').html(data.html);
+      }
+    });
+
+  });
+
+
+  // Close customer detail page
+  $('#page-container').on('click', '#detail-close-btn', function(){
+    // var pk = $(this).attr('data-customer-id');
+
+    $.ajax({
+      url: '/customers/list',
+      type: 'get',
+      dataType: 'json',
+      success: function(data){
+        $('#page-container').html(data.html);
+      }
+    });
+
+  });
+
 });

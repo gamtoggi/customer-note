@@ -22,7 +22,7 @@
     </div> -->
 
     {% for customer in customers %}
-    <div class="customer-list-item" >
+    <div class="customer-list-item" data-customer-id="{{ customer.pk }}">
       <span class="icon">
         <i class="fas fa-user-circle fa-lg has-text-primary"></i>
       </span>

@@ -1,0 +1,79 @@
+<!-- Contact buttons -->
+<div class="has-text-centered">
+  <button class="button is-white is-large">
+    <span class="icon">
+      <i class="fas fa-phone has-text-primary"></i>
+    </span>
+  </button>
+  <button class="button is-white is-large">
+    <span class="icon">
+      <i class="fas fa-sms has-text-primary"></i>
+    </span>
+  </button>
+  <button class="button is-white is-large">
+    <span class="icon">
+      <i class="fas fa-comments has-text-primary"></i>
+    </span>
+  </button>
+</div>
+
+<!-- info -->
+<table class="table">
+  <tr>
+    <th>전화</th>
+    <td>{{ customer.phone }}</td>
+    <td>
+      <button class="button is-small is-white">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <th>카카오톡</th>
+    <td>{{ customer.kakao }}</td>
+    <td>
+      <button class="button is-small is-white">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <th>주소</th>
+    <td>{{ customer.address1 }} {{ customer.address2 }}</td>
+    <td>
+      <button class="button is-small is-white">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <th>생일</th>
+    <td>{{ customer.birthday }}</td>
+    <td>
+      <button class="button is-small is-white">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <th>메모</th>
+    <td>{{ customer.memo }}</td>
+    <td>
+      <button class="button is-small is-white">
+        <span class="icon">
+          <i class="fas fa-edit"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<a href="#" class="is-pulled-right is-size-6">고객 삭제</a>

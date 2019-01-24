@@ -15,10 +15,11 @@ class Customer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.username + ' : ' + self.name
+        return '[{}] {} (owner : {})'.format(self.pk, self.name, self.user.username)
 
     def get_summary(self):
         return {
+            'pk': self.pk,
             'name': self.name,
             'contact_ago': 0,
         }

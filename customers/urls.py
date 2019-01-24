@@ -4,7 +4,13 @@ from . import views
 app_name = 'customers'
 urlpatterns = [
     # /customers
-    path('', views.customer_list, name='index'),
+    path('', views.customer_index, name='index'),
+
+    # /customers/list
+    path('list', views.customer_list, name='list'),
+
+    # /customers/1
+    path('<int:pk>', views.customer_detail, name='detail'),
 
     # /customers/create
     path('create', views.customer_create, name='create'),

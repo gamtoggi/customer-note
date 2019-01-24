@@ -1,9 +1,6 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from .models import Customer
@@ -11,9 +8,36 @@ from .forms import CustomerForm
 
 
 @login_required
-def customer_list(request):
+def customer_index(request):
     context = get_customer_list_context()
     return render(request, 'customers/index.html', context)
+
+
+@login_required
+def customer_list(request):
+    data = {}
+
+    context = get_customer_list_context()
+    data['html'] = render_to_string('customers/list.html',
+        context,
+        request=request
+    )
+    return JsonResponse(data)
+
+
+@login_required
+def customer_detail(request, pk):
+    data = {}
+
+    context = {}
+    context['customer'] = get_object_or_404(Customer, pk=pk)
+
+    data['html'] = render_to_string('customers/detail.html',
+        context,
+        request=request
+    )
+    # return render(request, 'customers/detail.html', context)
+    return JsonResponse(data)
 
 
 @login_required
