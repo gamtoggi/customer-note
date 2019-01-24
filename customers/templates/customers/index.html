@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-<div class="mainbox">
+<div id="app" class="mainbox">
   <div class="containerbox vborder">
 
     <!-- Top -->
@@ -30,49 +32,26 @@
       </div>
     </div><!-- end Top -->
 
-    <!-- Add Customer -->
-    <div id="add-customer" class="padding10box">
-      <div class="container">
-        <a class="has-text-weight-bold" @click="showForm">+ 고객 추가</a>
-        <p><small class="has-text-grey">총 0 명</small></p>
-        <!-- Modal -->
-        <div v-html="modalHtml"></div>
-      </div>
 
-      <!-- help message -->
-      <div class="helpbox has-text-centered">
-        <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
-        <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
-        <p class="has-text-grey-light is-size-7">나의 고객을 추가하고, 고객 관리를 시작하세요!</p>
-      </div>  
+    <!-- Customer Create Modal -->
+    <div id="form-container">
     </div>
 
 
+    <!-- Customer List -->
+    <div id="customer-list-container">
+      {% include 'customers/partial_list.html' %}
+    </div>
+
 
   </div>
+  <!-- end of contentbox -->
 </div>
+<!-- end of mainbox -->
 
 
 {% endblock %}
 
 {% block script %}
-<script>
-  new Vue({
-    el: '#add-customer',
-    delimiters: ['[[', ']]'],
-    data: {
-      modalHtml: '',
-    },
-    methods: {
-      showForm() {
-        var self = this;
-        axios.get('{% url "customers:create" %}')
-        .then(function(response){
-          console.log(response.data.html);
-          self.modalHtml = response.data.html;
-        });
-      }
-    }
-  });
-</script>
+<script src="{% static 'customers/js/customers.js' %}"></script>
 {% endblock %}

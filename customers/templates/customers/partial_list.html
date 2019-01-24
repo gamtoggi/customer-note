@@ -1,0 +1,35 @@
+<!-- Add Customer -->
+<div class="padding10box">
+  <div class="container">
+    <a id="add-customer-btn" class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
+    <p><small class="has-text-grey">총 {{ customer_count }} 명</small></p>
+  </div>
+
+  <!-- help message -->
+  {% if customer_count == 0 %}
+  <div class="helpbox has-text-centered">
+    <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+    <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
+    <p class="has-text-grey-light is-size-7">나의 고객을 추가하고, 고객 관리를 시작하세요!</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="padding10box">
+  <div>
+    <!-- <div class="customer-list-header">
+      <p>[[ group.name ]]</p>
+    </div> -->
+
+    {% for customer in customers %}
+    <div class="customer-list-item" >
+      <span class="icon">
+        <i class="fas fa-user-circle fa-lg has-text-primary"></i>
+      </span>
+      <b>{{ customer.name }}</b>
+      <small class="is-pulled-right">마지막 연락 {{ customer.contact_ago }}일 전</small>
+    </div>
+    {% endfor %}
+    <br>
+  </div>
+</div>

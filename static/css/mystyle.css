@@ -11,16 +11,6 @@ html, body, main {
   justify-content: center;
 }
 
-.vborder {
-  border-left: 1px solid #efefef;
-  border-right: 1px solid #efefef;
-}
-
-.form-box {
-  width: 500px;
-  max-width: 500px;
-}
-
 .containerbox {
   width: 580px;
   max-width: 580px;
@@ -29,15 +19,39 @@ html, body, main {
   height: 100%;
 }
 
-.padding10box {
-  padding: 10px;
+.vborder {
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+
+.customer-list-item {
+  border-bottom: 1px solid #efefef;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.customer-list-header {
+  font-size: 12px;
+}
+
+.customer-list-item b {
+  font-size: 14px;
+}
+
+.customer-list-item small {
+  font-size: 10px;
+}
+
+.form-box {
+  width: 500px;
+  max-width: 500px;
 }
 
 
 
-/* a {
-  color: black;
-} */
+.padding10box {
+  padding: 10px;
+}
 
 .helpbox {
   margin-top: 60px;

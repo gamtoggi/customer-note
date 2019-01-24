@@ -13,3 +13,12 @@ class Customer(models.Model):
     memo = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username + ' : ' + self.name
+
+    def get_summary(self):
+        return {
+            'name': self.name,
+            'contact_ago': 0,
+        }

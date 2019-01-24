@@ -1,0 +1,123 @@
+<div id="form-modal" class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <form id="add-customer-form" method="post" action="{% url 'customers:create' %}">
+      {% csrf_token %}
+      <header class="modal-card-head">
+        <p class="modal-card-title">고객 추가</p>
+        <!-- <button class="delete" aria-label="close"></button> -->
+      </header>
+      <section class="modal-card-body">
+        <div>
+          <table class="table is-fullwidth is-hoverable is-borderless">
+            <tbody>
+              <!-- Name -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">이름*</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="name" required placeholder="">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Phone -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">전화번호</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="phone" placeholder="">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- kakao -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">카카오 ID</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="kakao" placeholder="">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+
+              <!-- 주소1 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">주소</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="address1" placeholder="예: 경기도 성남시 분당구 판교동">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+
+              <!-- 주소2 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small"></label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="address2" placeholder="예: 장미아파트 123동 456호">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 생일 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small"></label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="date" name="birthday" placeholder="">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Text Area -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">메모</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <textarea class="textarea is-small" name="memo" cols="30" rows="3"></textarea>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-primary" type="submit">저장</button>
+        <button id="modal-cancel" class="button">취소</button>
+      </footer>
+    </form>
+  </div>
+</div>
