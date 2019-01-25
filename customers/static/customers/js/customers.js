@@ -3,7 +3,7 @@ $(function(){
   // Show add customer form modal
   $('#page-container').on('click', '#add-customer-btn', function(){
     $.ajax({
-      url: '/customers/create',
+      url: '/customers/ajax/create',
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -23,7 +23,7 @@ $(function(){
     var form = $(this);
 
     $.ajax({
-      url: '/customers/create',
+      url: '/customers/ajax/create',
       data: form.serialize(),
       type: 'post',
       dataType: 'json',
@@ -46,7 +46,7 @@ $(function(){
     var pk = $(this).attr('data-customer-id');
 
     $.ajax({
-      url: '/customers/' + pk,
+      url: '/customers/ajax/' + pk,
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -62,7 +62,7 @@ $(function(){
     // var pk = $(this).attr('data-customer-id');
 
     $.ajax({
-      url: '/customers/list',
+      url: '/customers/ajax',
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -94,7 +94,7 @@ $(function(){
     var pk = form.attr('data-pk');
 
     $.ajax({
-      url: '/customers/' + pk + '/update',
+      url: '/customers/ajax/' + pk + '/update',
       data: form.serialize(),
       type: 'post',
       dataType: 'json',

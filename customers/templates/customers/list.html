@@ -1,36 +1,21 @@
-<!-- Top -->
-<div class="columns is-mobile">
-  <!-- Search Bar -->
-  <div class="column is-mobile">
-    <form action="">
-      <div class="field">
-        <div class="control has-icons-left">
-          <input type="search" class="input is-rounded" placeholder="이름, 주소, 메모...">
-          <span class="icon is-left">
-            <i class="fas fa-search"></i>
-          </span>
-        </div>
+{% extends 'base.html' %}
 
-      </div>
-    </form>
+{% load static %}
+
+{% block content %}
+<div class="mainbox">
+  <div id="page-container" class="containerbox vborder">
+
+    {% include 'customers/partial_list.html' %}
+
   </div>
-  <!-- Sorting button -->
-  <div class="column is-narrow">
-    <button class="button">
-      <span class="icon is-left">
-        <i class="fas fa-ellipsis-h"></i>
-      </span>
-    </button>
-  </div>
-</div><!-- end Top -->
-
-
-<!-- Customer Create Modal -->
-<div id="form-container">
+  <!-- end of contentbox -->
 </div>
+<!-- end of mainbox -->
 
 
-<!-- Customer List -->
-<div id="customer-list-container">
-  {% include 'customers/partial_list.html' %}
-</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'customers/js/customers.js' %}"></script>
+{% endblock %}

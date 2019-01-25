@@ -1,42 +1,21 @@
+{% extends 'base.html' %}
 
-    <!-- top links -->
-    <div>
-      <button id="detail-close-btn" class="delete is-pulled-right" data-customer-id="{{ customer.pk }}"></button>
-    </div>
+{% load static %}
 
-    <section class="section">
-      <!-- customer icon -->
-      <div class="has-text-centered">
-        <span class="icon ">
-          <i class="fas fa-2x fa-user-circle has-text-primary"></i>
-        </span>
-      </div>
-      <!-- customer name -->
-      <div class="has-text-centered">
-        <div class="info-row">
-          <div class="info-view">
-            <span class="info-value">{{ customer.name|default:'없음' }}</span>
-            <span class="icon">
-              <i class="fas fa-edit has-text-grey-light"></i>
-            </span>
-          </div>
-          <div class="info-input is-hidden">
-            <form class="detail-form" data-pk="{{ customer.pk }}">
-              {% csrf_token %}
-              <div class="field">
-                <input type="text" name="name" class="input is-small" value="{{ customer.name|default:'' }}" autofocus required>
-              </div>
-              <button class="button is-small is-primary is-pulled-right">저장</button>
-              <button class="detail-form-cancel button is-small is-white is-pulled-right">취소</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
+{% block content %}
+<div class="mainbox">
+  <div id="page-container" class="containerbox vborder">
+
+    {% include 'customers/partial_detail.html'%}
+
+  </div>
+  <!-- end of contentbox -->
+</div>
+<!-- end of mainbox -->
 
 
+{% endblock %}
 
-    <!-- panel -->
-    <div id="panel-container">
-      {% include 'customers/partial_detail_info.html' %}
-    </div>
+{% block script %}
+<script src="{% static 'customers/js/customers.js' %}"></script>
+{% endblock %}

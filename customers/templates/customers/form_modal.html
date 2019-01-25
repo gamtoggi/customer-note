@@ -1,7 +1,7 @@
 <div id="form-modal" class="modal is-active">
   <div class="modal-background"></div>
   <div class="modal-card">
-    <form id="add-customer-form" method="post" action="{% url 'customers:create' %}">
+    <form id="add-customer-form">
       {% csrf_token %}
       <header class="modal-card-head">
         <p class="modal-card-title">고객 추가</p>

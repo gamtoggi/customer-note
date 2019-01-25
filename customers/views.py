@@ -8,18 +8,16 @@ from .forms import CustomerForm, CustomerNameForm, CustomerPhoneForm, CustomerKa
 
 
 @login_required
-def customer_index(request):
-    '''고객 목록 full 페이지'''
+def customer_list(request):
     context = get_customer_list_context()
-    return render(request, 'customers/index.html', context)
+    return render(request, 'customers/list.html', context)
 
 
 @login_required
-def customer_list(request):
-    '''ajax용으로 navbar 등을 제외한 고객 리스트 부분만 전송'''
+def customer_ajax_list(request):
     data = {}
     context = get_customer_list_context()
-    data['html'] = render_to_string('customers/list.html',
+    data['html'] = render_to_string('customers/partial_list.html',
         context,
         request=request
     )
@@ -28,21 +26,23 @@ def customer_list(request):
 
 @login_required
 def customer_detail(request, pk):
-    '''ajax용으로 navbar 등을 제외한 고객 정보 페이지만 전송'''
+    context = get_customer_detail_context(pk, 'info')
+    return render(request, 'customers/detail.html', context)
+
+
+@login_required
+def customer_ajax_detail(request, pk):
+    context = get_customer_detail_context(pk, 'info')
     data = {}
-    context = {}
-    context['customer'] = get_object_or_404(Customer, pk=pk)
-    context['tab_active'] = 'info'
-    data['html'] = render_to_string('customers/detail.html',
+    data['html'] = render_to_string('customers/partial_detail.html',
         context,
         request=request
     )
-    # return render(request, 'customers/detail.html', context)
     return JsonResponse(data)
 
 
 @login_required
-def customer_create(request):
+def customer_ajax_create(request):
     '''ajax json api. 고객 추가'''
     data = {}
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def customer_create(request):
             customer.save()
             context = get_customer_list_context()
             data['result'] = 'ok'
-            data['html'] = render_to_string('customers/partial_list.html',
+            data['html'] = render_to_string('customers/partial_list_contents.html',
                 context,
                 request=request
             )
@@ -69,8 +69,7 @@ def customer_create(request):
 
 
 @login_required
-def customer_update(request, pk):
-    '''ajax json api. 고객 정보 수정'''
+def customer_ajax_update(request, pk):
     data = {}
     status = 200
     if request.method == 'POST':
@@ -107,11 +106,17 @@ def customer_update(request, pk):
 
 
 def get_customer_list_context():
-    '''고객 목록 페이지에 필요한 정보를 dictionary 형태로 반환'''
     context = {}
     context['customers'] = []
     object_list = Customer.objects.order_by('-created_at')
     for obj in object_list:
         context['customers'].append(obj.get_summary())
     context['customer_count'] = len(object_list)
+    return context
+
+
+def get_customer_detail_context(pk, tab_active):
+    context = {}
+    context['customer'] = get_object_or_404(Customer, pk=pk)
+    context['tab_active'] = tab_active
     return context
