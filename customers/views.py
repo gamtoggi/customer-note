@@ -32,6 +32,7 @@ def customer_detail(request, pk):
     data = {}
     context = {}
     context['customer'] = get_object_or_404(Customer, pk=pk)
+    context['tab_active'] = 'info'
     data['html'] = render_to_string('customers/detail.html',
         context,
         request=request

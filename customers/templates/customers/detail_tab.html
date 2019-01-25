@@ -1,0 +1,25 @@
+<!-- tabs -->
+<div class="tabs is-centered is-boxed">
+  <ul>
+    <li {% if tab_active == 'info' %}class="is-active"{% endif %}>
+      <a>
+        <!-- <span class="icon is-small"><i class="fas fa-user-circle"></i></span> -->
+        <span><small>정보</small></span>
+      </a>
+    </li>
+    <li {% if tab_active == 'contact' %}class="is-active"{% endif %}>
+      <a>
+        <!-- <span class="icon is-small"><i class="fas fa-phone" aria-hidden="true"></i></span> -->
+        <span><small>연락 기록</small></span>
+      </a>
+    </li>
+    <li {% if tab_active == 'purchase' %}class="is-active"{% endif %}>
+      <a>
+        <!-- <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span> -->
+        <span><small>구매 기록</small></span>
+      </a>
+    </li>
+
+  </ul>
+</div>
+<!-- end of tabs -->
