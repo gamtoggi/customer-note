@@ -14,7 +14,7 @@ def customer_list(request):
 
 
 @login_required
-def customer_ajax_list(request):
+def customer_list_ajax(request):
     data = {}
     context = get_customer_list_context()
     data['html'] = render_to_string('customers/partial_list.html',
@@ -26,13 +26,41 @@ def customer_ajax_list(request):
 
 @login_required
 def customer_detail(request, pk):
-    context = get_customer_detail_context(pk, 'info')
-    return render(request, 'customers/detail.html', context)
+    return render_detail(request, pk, 'info')
 
 
 @login_required
-def customer_ajax_detail(request, pk):
-    context = get_customer_detail_context(pk, 'info')
+def customer_detail_ajax(request, pk):
+    return render_detail_ajax(request, pk, 'info')
+
+
+@login_required
+def customer_detail_contacts(request, pk):
+    return render_detail(request, pk, 'contacts')
+
+
+@login_required
+def customer_detail_contacts_ajax(request, pk):
+    return render_detail_ajax(request, pk, 'contacts')
+
+
+@login_required
+def customer_detail_purchases(request, pk):
+    return render_detail(request, pk, 'purchases')
+
+
+@login_required
+def customer_detail_purchases_ajax(request, pk):
+    return render_detail_ajax(request, pk, 'purchases')
+
+
+def render_detail(request, pk, tab_active):
+    context = get_customer_detail_context(pk, tab_active)
+    return render(request, 'customers/detail.html', context)
+
+
+def render_detail_ajax(request, pk, tab_active):
+    context = get_customer_detail_context(pk, tab_active)
     data = {}
     data['html'] = render_to_string('customers/partial_detail.html',
         context,
@@ -42,8 +70,7 @@ def customer_ajax_detail(request, pk):
 
 
 @login_required
-def customer_ajax_create(request):
-    '''ajax json api. 고객 추가'''
+def customer_create_ajax(request):
     data = {}
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -69,7 +96,7 @@ def customer_ajax_create(request):
 
 
 @login_required
-def customer_ajax_update(request, pk):
+def customer_update_ajax(request, pk):
     data = {}
     status = 200
     if request.method == 'POST':

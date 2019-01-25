@@ -3,7 +3,7 @@ $(function(){
   // Show add customer form modal
   $('#page-container').on('click', '#add-customer-btn', function(){
     $.ajax({
-      url: '/customers/ajax/create',
+      url: '/customers/create/ajax',
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -23,7 +23,7 @@ $(function(){
     var form = $(this);
 
     $.ajax({
-      url: '/customers/ajax/create',
+      url: '/customers/create/ajax',
       data: form.serialize(),
       type: 'post',
       dataType: 'json',
@@ -46,7 +46,7 @@ $(function(){
     var pk = $(this).attr('data-customer-id');
 
     $.ajax({
-      url: '/customers/ajax/' + pk,
+      url: '/customers/' + pk + '/ajax',
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -94,7 +94,7 @@ $(function(){
     var pk = form.attr('data-pk');
 
     $.ajax({
-      url: '/customers/ajax/' + pk + '/update',
+      url: '/customers/' + pk + '/update/ajax',
       data: form.serialize(),
       type: 'post',
       dataType: 'json',
@@ -124,4 +124,23 @@ $(function(){
     return false;
   });
 
+
+  // Customer detail page tab
+  $('#page-container').on('click', '.detail-tab', function(){
+    var url = $(this).attr('data-url');
+    loadPartialPage(url);
+  });
+
 });
+
+
+function loadPartialPage(url) {
+  $.ajax({
+    url: url,
+    type: 'get',
+    dataType: 'json',
+    success: function(data){
+      $('#page-container').html(data.html);
+    }
+  });
+}

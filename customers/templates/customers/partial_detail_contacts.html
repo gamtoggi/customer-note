@@ -1,0 +1,38 @@
+{% include 'customers/partial_detail_tab.html' %}
+
+<!-- Add Customer -->
+<div class="padding10box">
+  <div class="container">
+    <a id="add-customer-btn" class="has-text-weight-bold has-text-primary">+ 연락 기록 추가</a>
+    <p><small class="has-text-grey">총 {{ contacts_count|default:0 }} 건</small></p>
+  </div>
+
+  <!-- help message -->
+  {% if contacts_count == None or contacts_count == 0 %}
+  <div class="helpbox has-text-centered">
+    <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+    <p class="has-text-grey-light is-size-7">고객과의 연락 내역을 기록하고</p>
+    <p class="has-text-grey-light is-size-7">고객과 얼마나 연락을 했는지</p>
+    <p class="has-text-grey-light is-size-7">내용은 무엇이었는지 기억하세요</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="padding10box">
+  <div>
+    <!-- <div class="customer-list-header">
+      <p>[[ group.name ]]</p>
+    </div> -->
+
+    <!-- {% for customer in customers %}
+    <div class="customer-list-item" data-customer-id="{{ customer.pk }}">
+      <span class="icon">
+        <i class="fas fa-user-circle fa-lg has-text-primary"></i>
+      </span>
+      <b>{{ customer.name }}</b>
+      <small class="is-pulled-right">마지막 연락 {{ customer.contact_ago }}일 전</small>
+    </div>
+    {% endfor %} -->
+    <br>
+  </div>
+</div>

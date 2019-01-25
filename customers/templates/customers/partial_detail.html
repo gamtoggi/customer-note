@@ -38,5 +38,11 @@
 
     <!-- panel -->
     <div id="panel-container">
-      {% include 'customers/partial_detail_info.html' %}
+      {% if tab_active == 'info' %}
+        {% include 'customers/partial_detail_info.html' %}
+      {% elif tab_active == 'contacts' %}
+        {% include 'customers/partial_detail_contacts.html' %}
+      {% elif tab_active == 'purchases' %}
+        purchases
+      {% endif %}
     </div>
