@@ -14,4 +14,7 @@ urlpatterns = [
 
     # /customers/create
     path('create', views.customer_create, name='create'),
+
+    # /customers/1/update
+    path('<int:pk>/update', views.customer_update, name='update'),
 ]

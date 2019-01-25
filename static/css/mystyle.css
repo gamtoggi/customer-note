@@ -70,3 +70,12 @@ html, body, main {
 .modal-background {
   background-color: rgba(10, 10, 10, 0.1);
 }
+
+.info-table th {
+  width: 70px;
+  font-size: 14px;
+}
+
+.info-table td {
+  font-size: 13px;
+}

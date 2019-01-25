@@ -72,4 +72,56 @@ $(function(){
 
   });
 
+
+  // Show customer detail info edit box
+  $('#page-container').on('click', '.info-row', function(){
+    $(this).children('.info-view').addClass('is-hidden');
+    $(this).children('.info-input').removeClass('is-hidden');
+  });
+
+
+  // Hide customer detail info edit box
+  $('#page-container').on('click', '.detail-form-cancel', function(){
+    $(this).closest('.info-row').children('.info-view').removeClass('is-hidden');
+    $(this).closest('.info-input').addClass('is-hidden');
+    return false;
+  });
+
+
+  // Submit customer detail info edit box
+  $('#page-container').on('submit', '.detail-form', function(){
+    var form = $(this);
+    var pk = form.attr('data-pk');
+
+    $.ajax({
+      url: '/customers/' + pk + '/update',
+      data: form.serialize(),
+      type: 'post',
+      dataType: 'json',
+      success: function(data){
+        if (data.result == 'ok') {
+          var value = "";
+          if (form.attr('data-name') == "address") {
+            var address1 = form.find('.input[name=address1]').val();
+            var address2 = form.find('.input[name=address2]').val();
+            value = address1 + " " + address2;
+          }
+          else {
+            value = form.find('.input').val();
+          }
+
+          var info_row = form.closest('.info-row');
+          info_row.find('.info-value').text(value);
+          info_row.children('.info-view').removeClass('is-hidden');
+          info_row.children('.info-input').addClass('is-hidden');
+        }
+        else {
+          console.log(data.error);
+        }
+      }
+    });
+
+    return false;
+  });
+
 });
