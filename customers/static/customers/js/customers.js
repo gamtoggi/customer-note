@@ -1,7 +1,7 @@
 $(function(){
 
   // Show add customer form modal
-  $('#customer-list-container').on('click', '#add-customer-btn', function(){
+  $('#page-container').on('click', '#add-customer-btn', function(){
     $.ajax({
       url: '/customers/create',
       type: 'get',
@@ -13,13 +13,13 @@ $(function(){
   });
 
   // Close add customer form modal
-  $('#form-container').on('click', '#modal-cancel', function(){
+  $('#page-container').on('click', '#modal-cancel', function(){
     $('#form-modal').removeClass('is-active');
     return false;
   });
 
   // Submit add customer form
-  $('#form-container').on('submit', '#add-customer-form', function(){
+  $('#page-container').on('submit', '#add-customer-form', function(){
     var form = $(this);
 
     $.ajax({

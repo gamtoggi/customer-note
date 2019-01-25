@@ -13,12 +13,24 @@
       </div>
       <!-- customer name -->
       <div class="has-text-centered">
-        <b>{{ customer.name }}</b>
-        <button class="button is-small is-white">
-          <span class="icon">
-            <i class="fas fa-edit"></i>
-          </span>
-        </button>
+        <div class="info-row">
+          <div class="info-view">
+            <span class="info-value">{{ customer.name|default:'없음' }}</span>
+            <span class="icon">
+              <i class="fas fa-edit has-text-grey-light"></i>
+            </span>
+          </div>
+          <div class="info-input is-hidden">
+            <form class="detail-form" data-pk="{{ customer.pk }}">
+              {% csrf_token %}
+              <div class="field">
+                <input type="text" name="name" class="input is-small" value="{{ customer.name|default:'' }}" autofocus required>
+              </div>
+              <button class="button is-small is-primary is-pulled-right">저장</button>
+              <button class="detail-form-cancel button is-small is-white is-pulled-right">취소</button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
 
