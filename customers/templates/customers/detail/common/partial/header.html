@@ -37,20 +37,21 @@
               </a>
             </div>
           </li>
-          <li {% if tab_active == 'contacts' %}class="is-active"{% endif %}>
-            <div class="js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}" data-target="#page-container">
-              <a>
-                <span><small>연락 기록</small></span>
-              </a>
-            </div>
-          </li>
           <li {% if tab_active == 'purchases' %}class="is-active"{% endif %}>
             <div class="js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}" data-target="#page-container">
               <a>
-                <span><small>구매 기록</small></span>
+                <span><small>구매 관리</small></span>
               </a>
             </div>
           </li>
+          <li {% if tab_active == 'contacts' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>연락 관리</small></span>
+              </a>
+            </div>
+          </li>
+
 
         </ul>
       </div>

@@ -22,7 +22,6 @@
 <!-- info -->
 <table class="table is-fullwidth info-table">
   {% include './info_row.html' with label='전화' name='phone' value=customer.phone|default:'' %}
-  {% include './info_row.html' with label='카카오톡' name='kakao' value=customer.kakao|default:'' %}
   {% include './info_row.html' with label='주소' name='address' value=customer.get_address|default:'' %}
   {% include './info_row.html' with label='생일' name='birthday' value=customer.birthday|default:'' %}
   {% include './info_row.html' with label='메모' name='memo' value=customer.memo|default:'' %}

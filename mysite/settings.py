@@ -44,8 +44,8 @@ INSTALLED_APPS = [
 # custom user model for auth :
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = 'customers:index'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'customers:list'
+LOGOUT_REDIRECT_URL = 'login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
