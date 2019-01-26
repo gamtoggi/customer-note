@@ -34,12 +34,16 @@ class Customer(models.Model):
         else:
             return -1
 
+    def get_waiting_next_purchases(self):
+        return self.purchase_set.filter(next_purchase_date__isnull=False, is_repurchased=False).order_by('-purchase_date', '-updated_at')
+
 
     def get_summary(self):
         return {
             'pk': self.pk,
             'name': self.name,
             'contact_ago': self.get_last_contact_ago(),
+            'purchases': self.get_waiting_next_purchases()
         }
 
     def get_address(self):

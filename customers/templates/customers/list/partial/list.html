@@ -56,19 +56,27 @@
       {% for customer in customers %}
       <div class="js-partial-btn" data-url="{% url 'customers:info_ajax' customer.pk %}" data-target="#page-container">
         <div class="customer-list-item">
-          <span class="icon">
-            <i class="fas fa-user-circle fa-lg has-text-primary"></i>
-          </span>
-          <b>{{ customer.name }}</b>
-          <small class="is-pulled-right">
-            {% if customer.contact_ago > 0 %}
-              마지막 연락 {{ customer.contact_ago }}일 전
-            {% elif customer.contact_ago == 0 %}
-              오늘 연락함
-            {% elif customer.contact_ago < 0 %}
-              연락 기록 없음
-            {% endif %}
-          </small>
+          <div>
+            <span class="icon">
+              <i class="fas fa-user-circle fa-lg has-text-primary"></i>
+            </span>
+            <b>{{ customer.name }}</b>
+            <small class="is-pulled-right">
+              {% if customer.contact_ago > 0 %}
+                마지막 연락 {{ customer.contact_ago }}일 전
+              {% elif customer.contact_ago == 0 %}
+                오늘 연락함
+              {% elif customer.contact_ago < 0 %}
+                연락 기록 없음
+              {% endif %}
+            </small>
+          </div>
+          {% for purchase in customer.purchases %}
+          <div>
+            <small>{{ purchase.name }}</small>
+            <progress class="small-progress progress is-primary is-small is-pulled-right" value="15" max="100">15</progress>
+          </div>
+          {% endfor %}
         </div>
       </div>
       {% endfor %}
