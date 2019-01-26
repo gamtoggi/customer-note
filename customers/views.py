@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
+from datetime import datetime
 
 from .models import Customer, Contact, Purchase
 from . import forms
@@ -112,7 +112,7 @@ def customer_contacts_ajax(request, pk):
 @login_required
 def customer_contacts_create_ajax(request, pk):
     if request.method == 'GET':
-        form = forms.ContactForm(initial={'contacted_at': timezone.now()})
+        form = forms.ContactForm(initial={'contacted_at': datetime.now()})
         context = { 'form': form }
 
         return render_ajax_response(

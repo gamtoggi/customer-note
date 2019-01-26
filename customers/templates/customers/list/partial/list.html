@@ -60,7 +60,15 @@
             <i class="fas fa-user-circle fa-lg has-text-primary"></i>
           </span>
           <b>{{ customer.name }}</b>
-          <small class="is-pulled-right">마지막 연락 {{ customer.contact_ago }}일 전</small>
+          <small class="is-pulled-right">
+            {% if customer.contact_ago > 0 %}
+              마지막 연락 {{ customer.contact_ago }}일 전
+            {% elif customer.contact_ago == 0 %}
+              오늘 연락함
+            {% elif customer.contact_ago < 0 %}
+              연락 기록 없음
+            {% endif %}
+          </small>
         </div>
       </div>
       {% endfor %}

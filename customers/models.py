@@ -18,11 +18,28 @@ class Customer(models.Model):
     def __str__(self):
         return '[{}] {} (owner : {})'.format(self.pk, self.name, self.user.username)
 
+
+    def get_last_contact(self):
+        queryset = self.contact_set.order_by('-contacted_at', '-updated_at')[:1]
+        if queryset.count() > 0:
+            return queryset[0]
+        else:
+            return None
+
+    def get_last_contact_ago(self):
+        last_contact = self.get_last_contact()
+        if last_contact != None:
+            delta = datetime.now().date() - last_contact.contacted_at
+            return delta.days
+        else:
+            return -1
+
+
     def get_summary(self):
         return {
             'pk': self.pk,
             'name': self.name,
-            'contact_ago': 0,
+            'contact_ago': self.get_last_contact_ago(),
         }
 
     def get_address(self):
