@@ -1,0 +1,18 @@
+<form class="js-form" action="{{ request.path }}?field={{ field }}" method="post">
+  {% csrf_token %}
+  <div class="field">
+    {% for field in form %}
+      {% if field.name == 'birthday' %}
+      <input type="date" name="{{ field.name }}" class="input is-small" value="{{ field.value|date:'Y-m-d' }}" autofocus>
+      {% elif field.name == 'memo' %}
+      <textarea name="{{ field.name }}" rows="5" class="textarea is-small">{{ field.value }}</textarea>
+      {% else %}
+      <input type="text" name="{{ field.name }}" class="input is-small" value="{{ field.value|default:'' }}" autofocus>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <button class="button is-small is-primary is-pulled-right">저장</button>
+  <div class="js-edit-cancel">
+    <p class="button is-small is-white is-pulled-right">취소</p>
+  </div>
+</form>

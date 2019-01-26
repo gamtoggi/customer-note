@@ -1,135 +1,173 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
-from .models import Customer
-from .forms import CustomerForm, CustomerNameForm, CustomerPhoneForm, CustomerKakaoForm, CustomerAddressForm, CustomerBirthdayForm, CustomerMemoForm
+from .models import Customer, Contact
+from . import forms
 
 
 @login_required
 def customer_list(request):
     context = get_customer_list_context()
-    return render(request, 'customers/list.html', context)
+    return render(request, 'customers/list/index.html', context)
 
 
 @login_required
 def customer_list_ajax(request):
-    data = {}
     context = get_customer_list_context()
-    data['html'] = render_to_string('customers/partial_list.html',
-        context,
-        request=request
-    )
-    return JsonResponse(data)
-
-
-@login_required
-def customer_detail(request, pk):
-    return render_detail(request, pk, 'info')
-
-
-@login_required
-def customer_detail_ajax(request, pk):
-    return render_detail_ajax(request, pk, 'info')
-
-
-@login_required
-def customer_detail_contacts(request, pk):
-    return render_detail(request, pk, 'contacts')
-
-
-@login_required
-def customer_detail_contacts_ajax(request, pk):
-    return render_detail_ajax(request, pk, 'contacts')
-
-
-@login_required
-def customer_detail_purchases(request, pk):
-    return render_detail(request, pk, 'purchases')
-
-
-@login_required
-def customer_detail_purchases_ajax(request, pk):
-    return render_detail_ajax(request, pk, 'purchases')
-
-
-def render_detail(request, pk, tab_active):
-    context = get_customer_detail_context(pk, tab_active)
-    return render(request, 'customers/detail.html', context)
-
-
-def render_detail_ajax(request, pk, tab_active):
-    context = get_customer_detail_context(pk, tab_active)
-    data = {}
-    data['html'] = render_to_string('customers/partial_detail.html',
-        context,
-        request=request
-    )
-    return JsonResponse(data)
+    return render_ajax_response(
+            template='customers/list/partial/list.html',
+            context=context)
 
 
 @login_required
 def customer_create_ajax(request):
-    data = {}
-    if request.method == 'POST':
-        form = CustomerForm(request.POST)
+    if request.method == 'GET':
+        return render_ajax_response(
+                template='customers/list/partial/form.html',
+                request=request)
+
+    elif request.method == 'POST':
+        form = forms.CustomerForm(request.POST)
+
         if form.is_valid():
             customer = form.save(commit=False)
             customer.user = request.user
             customer.save()
-            context = get_customer_list_context()
-            data['result'] = 'ok'
-            data['html'] = render_to_string('customers/partial_list_contents.html',
-                context,
-                request=request
-            )
+            return customer_list_ajax(request)
         else:
-            data['result'] = 'fail'
-            data['errors'] = form.errors
-    elif request.method == 'GET':
-        data['html'] = render_to_string('customers/form_modal.html',
-            {},
-            request=request
-        )
-    return JsonResponse(data)
+            return render_ajax_response(status=400, errors=form.errors)
 
 
 @login_required
 def customer_update_ajax(request, pk):
-    data = {}
-    status = 200
-    if request.method == 'POST':
-        customer = get_object_or_404(Customer, pk=pk)
+    customer = get_object_or_404(Customer, pk=pk)
+    field = request.GET.get('field')
+    form_class = get_customer_partial_form_class(field)
 
-        if request.POST.get('name') != None:
-            form_class = CustomerNameForm
-        elif request.POST.get('phone') != None:
-            form_class = CustomerPhoneForm
-        elif request.POST.get('kakao') != None:
-            form_class = CustomerKakaoForm
-        elif request.POST.get('address1') != None or request.POST.get('address2') != None:
-            form_class = CustomerAddressForm
-        elif request.POST.get('birthday') != None:
-            form_class = CustomerBirthdayForm
-        elif request.POST.get('memo') != None:
-            form_class = CustomerMemoForm
+    if request.method == 'GET':
+        form = form_class(instance=customer)
+        context = {'form': form, 'field': field}
+        return render_ajax_response(
+            template='customers/detail/info/partial/form.html',
+            request=request,
+            context=context)
 
-        try:
-            form = form_class(request.POST, instance=customer)
-            if form.is_valid():
-                form.save()
-                data['result'] = 'ok'
-            else:
-                data['result'] = 'fail'
-                data['errors'] = form.errors
-                status = 400
-        except NameError:
-            data['result'] = 'fail'
-            data['errors'] = 'form is none'
-            status = 400
+    elif request.method == 'POST':
+        form = form_class(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return customer_info_ajax(request, pk)
+        else:
+            return render_ajax_response(status=400, errors=form.errors)
 
-    return JsonResponse(status=status, data=data)
+
+def get_customer_partial_form_class(field):
+    if field == 'name':
+        form_class = forms.CustomerNameForm
+    elif field == 'phone':
+        form_class = forms.CustomerPhoneForm
+    elif field == 'kakao':
+        form_class = forms.CustomerKakaoForm
+    elif field == 'address':
+        form_class = forms.CustomerAddressForm
+    elif field == 'birthday':
+        form_class = forms.CustomerBirthdayForm
+    elif field == 'memo':
+        form_class = forms.CustomerMemoForm
+    return form_class
+
+
+@login_required
+def customer_info(request, pk):
+    context = get_customer_info_context(pk)
+    return render(request, 'customers/detail/info/index.html', context)
+
+
+@login_required
+def customer_info_ajax(request, pk):
+    context = get_customer_info_context(pk)
+    return render_ajax_response(
+            template='customers/detail/info/partial/info.html',
+            context=context)
+
+
+@login_required
+def customer_contacts(request, pk):
+    context = get_customer_contacts_context(pk)
+    return render(request, 'customers/detail/contacts/index.html', context)
+
+
+@login_required
+def customer_contacts_ajax(request, pk):
+    context = get_customer_contacts_context(pk)
+    return render_ajax_response(
+        template='customers/detail/contacts/partial/contacts.html',
+        context=context)
+
+
+@login_required
+def customer_contacts_create_ajax(request, pk):
+    if request.method == 'GET':
+        form = forms.ContactForm(initial={'contacted_at': timezone.now()})
+        context = { 'form': form }
+
+        return render_ajax_response(
+                template='customers/detail/contacts/partial/form.html',
+                request=request,
+                context=context)
+
+    elif request.method == 'POST':
+        form = forms.ContactForm(request.POST)
+
+        if form.is_valid():
+            customer = get_object_or_404(Customer, pk=pk)
+            contact = form.save(commit=False)
+            contact.user = request.user
+            contact.customer = customer
+            contact.save()
+            return redirect('customers:contacts_ajax', pk=pk)
+        else:
+            return render_ajax_response(status=400, errors=form.errors)
+
+
+@login_required
+def customer_contacts_update_ajax(request, pk, contact_pk):
+    contact = get_object_or_404(Contact, pk=contact_pk)
+
+    if request.method == 'GET':
+        form = forms.ContactForm(instance=contact)
+        context = { 'form': form }
+        return render_ajax_response(
+                template='customers/detail/contacts/partial/form.html',
+                request=request,
+                context=context)
+
+    elif request.method == 'POST':
+        form = forms.ContactForm(request.POST, instance=contact)
+        if form.is_valid():
+            form.save()
+            return redirect('customers:contacts_ajax', pk=pk)
+        else:
+            return render_ajax_response(status=400, errors=form.errors)
+
+
+
+@login_required
+def customer_purchases(request, pk):
+    context = get_customer_purchases_context(pk)
+    return render(request, 'customers/detail/purchases/index.html', context)
+
+
+@login_required
+def customer_purchases_ajax(request, pk):
+    context = get_customer_purchases_context(pk)
+    return render_ajax_response(
+            template='customers/detail/purchases/partial/purchases.html',
+            context=context)
 
 
 def get_customer_list_context():
@@ -142,8 +180,37 @@ def get_customer_list_context():
     return context
 
 
-def get_customer_detail_context(pk, tab_active):
-    context = {}
-    context['customer'] = get_object_or_404(Customer, pk=pk)
-    context['tab_active'] = tab_active
-    return context
+def get_customer_info_context(pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    return {
+        'customer': customer,
+        'tab_active': 'info',}
+        # 'form': forms.CustomerUpdateForm(instance=customer) }
+
+
+def get_customer_contacts_context(pk):
+    customer = get_object_or_404(Customer,pk=pk)
+    contacts = customer.contact_set.order_by('-contacted_at', '-updated_at')
+    return {
+        'customer': customer,
+        'tab_active': 'contacts',
+        'contacts': contacts,
+        'contacts_count': customer.contact_set.count() }
+
+
+def get_customer_purchases_context(pk):
+    customer = get_object_or_404(Customer,pk=pk)
+
+    return {
+        'customer': customer,
+        'tab_active': 'purchases', }
+
+
+def render_ajax_response(template=None, request=None, context=None, status=200, errors=None):
+    data = {}
+    data['status'] = status
+    if template != None:
+        data['html'] = render_to_string(template, context, request=request)
+    if errors != None:
+        data['errors'] = errors
+    return JsonResponse(data)

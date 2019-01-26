@@ -79,3 +79,20 @@ html, body, main {
 .info-table td {
   font-size: 13px;
 }
+
+.contact-type-dropdown {
+  width: 50px;
+}
+
+.contact-table th {
+  width: 30px;
+}
+
+.contact-table td {
+  font-size: 14px;
+}
+
+.contact-box {
+  padding: 10px;
+  border-bottom: 1px solid #efefef;
+}

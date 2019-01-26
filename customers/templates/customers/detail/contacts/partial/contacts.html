@@ -1,0 +1,57 @@
+{% include '../../common/partial/header.html' %}
+
+<!-- Add Customer -->
+<div class="padding10box">
+  <div class="container">
+    <div class="js-partial-btn" data-url="{% url 'customers:contacts_create_ajax' customer.pk %}" data-target=".js-new-form-container">
+      <a class="has-text-weight-bold has-text-primary">+ 연락 기록 추가</a>
+    </div>
+    <p><small class="has-text-grey">총 {{ contacts_count|default:0 }} 건</small></p>
+  </div>
+
+  <!-- help message -->
+  <div id="help-container">
+    {% if contacts_count == 0 %}
+    <div class="helpbox has-text-centered">
+      <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+      <p class="has-text-grey-light is-size-7">고객과의 대화 내용을 잊지 않도록</p>
+      <p class="has-text-grey-light is-size-7">연락 내역을 기록해두세요.</p>
+      <p class="has-text-grey-light is-size-7">고객과 언제 마지막으로 연락했나요?</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- form -->
+<div class="js-new-form-container"></div>
+
+<div class="padding10box">
+  <div>
+    {% for contact in contacts %}
+    <div class="contact-box">
+      <div class="js-edit" data-url="{% url 'customers:contacts_update_ajax' contact.customer.pk contact.pk %}">
+        <div class="js-info-container">
+          <table class="contact-table">
+            <tr>
+              <th>
+                <span class="icon is-small">
+                  <i class="fas fa-comments has-text-primary"></i>
+                </span>
+              </th>
+              <td>{{ contact.contacted_at }}</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                {{ contact.memo }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="js-form-container"></div>
+      </div>
+    </div>
+    {% endfor %}
+    <br>
+  </div>
+</div>

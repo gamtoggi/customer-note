@@ -1,0 +1,59 @@
+
+    <!-- top links -->
+    <div class="js-partial-btn" data-url="{% url 'customers:list_ajax' %}" data-target="#page-container">
+      <button class="delete is-pulled-right"></button>
+    </div>
+
+    <section class="section">
+      <!-- customer icon -->
+      <div class="has-text-centered">
+        <span class="icon ">
+          <i class="fas fa-2x fa-user-circle has-text-primary"></i>
+        </span>
+      </div>
+      <!-- customer name -->
+      <div class="has-text-centered">
+        <div class="js-edit" data-url="{% url 'customers:update_ajax' customer.pk %}?field=name">
+          <div class="js-info-container">
+            <span>{{ customer.name|default:'없음' }}</span>
+            <span class="icon">
+              <i class="fas fa-edit has-text-grey-light"></i>
+            </span>
+          </div>
+          <div class="js-form-container"></div>
+    </section>
+
+
+
+    <!-- panel -->
+    <div id="panel-container">
+      <!-- tabs -->
+      <div class="tabs is-centered is-boxed">
+        <ul>
+          <li {% if tab_active == 'info' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:info_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>정보</small></span>
+              </a>
+            </div>
+          </li>
+          <li {% if tab_active == 'contacts' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>연락 기록</small></span>
+              </a>
+            </div>
+          </li>
+          <li {% if tab_active == 'purchases' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>구매 기록</small></span>
+              </a>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+      <!-- end of tabs -->
+
+    </div>

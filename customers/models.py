@@ -23,3 +23,23 @@ class Customer(models.Model):
             'name': self.name,
             'contact_ago': 0,
         }
+
+    def get_address(self):
+        str = '';
+        if self.address1 != None:
+            str += self.address1
+        if self.address2 != None:
+            str += ' ' + self.address2
+        return str
+
+
+class Contact(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    contacted_at = models.DateField()
+    memo = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '[{}] {}:{}'.format(self.pk, self.customer.name, self.memo)

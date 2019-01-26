@@ -1,0 +1,29 @@
+<form class="js-form" action="{{ request.path }}" method="post">
+  {% csrf_token %}
+  <table class="table info-table">
+    <tr>
+      <th>
+        날짜
+      </th>
+      <td>
+        <div class="field">
+          <input type="date" class="input is-small is-fullwidth" name="contacted_at" value="{{ form.contacted_at.value|date:'Y-m-d' }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        메모
+      </th>
+      <td>
+        <textarea name="memo" class="input textarea is-small" rows="3" cols="80">{{ form.memo.value|default:'' }}</textarea>
+      </td>
+    </tr>
+  </table>
+  <div>
+    <button class="button is-primary is-small is-pulled-right">저장</button>
+    <div class="js-edit-cancel">
+      <p class="button is-white is-small is-pulled-right">취소</p>
+    </div>
+  </div>
+</form>

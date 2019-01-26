@@ -1,0 +1,70 @@
+<div class="columns is-mobile">
+  <!-- 검색창 -->
+  <div class="column is-mobile">
+    <form action="">
+      <div class="field">
+        <div class="control has-icons-left">
+          <input type="search" class="input is-rounded" placeholder="이름, 주소, 메모...">
+          <span class="icon is-left">
+            <i class="fas fa-search"></i>
+          </span>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <!-- 정렬 버튼 -->
+  <div class="column is-narrow">
+    <button class="button">
+      <span class="icon is-left">
+        <i class="fas fa-ellipsis-h"></i>
+      </span>
+    </button>
+  </div>
+</div>
+
+
+<div class="padding10box">
+  <!-- 고객 추가 버튼 -->
+  <div class="container">
+    <div class="js-partial-btn" data-url="{% url 'customers:create_ajax' %}" data-target="#form-container">
+      <a class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
+    </div>
+    <p><small class="has-text-grey">총 {{ customer_count }} 명</small></p>
+  </div>
+
+  <!-- 도움말 -->
+  {% if customer_count == 0 %}
+  <div class="helpbox has-text-centered">
+    <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+    <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
+    <p class="has-text-grey-light is-size-7">나의 고객을 추가하고, 고객 관리를 시작하세요!</p>
+  </div>
+  {% endif %}
+</div>
+
+
+<!-- 고객 추가 폼 로드 위치 -->
+<div id="form-container">
+</div>
+
+
+<!-- 고객 리스트 -->
+<div id="customer-list-container">
+  <div class="padding10box">
+    <div>
+      {% for customer in customers %}
+      <div class="js-partial-btn" data-url="{% url 'customers:info_ajax' customer.pk %}" data-target="#page-container">
+        <div class="customer-list-item">
+          <span class="icon">
+            <i class="fas fa-user-circle fa-lg has-text-primary"></i>
+          </span>
+          <b>{{ customer.name }}</b>
+          <small class="is-pulled-right">마지막 연락 {{ customer.contact_ago }}일 전</small>
+        </div>
+      </div>
+      {% endfor %}
+      <br>
+    </div>
+  </div>
+</div>
