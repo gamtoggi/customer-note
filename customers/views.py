@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-from .models import Customer, Contact
+from .models import Customer, Contact, Purchase
 from . import forms
 
 
@@ -170,6 +170,52 @@ def customer_purchases_ajax(request, pk):
             context=context)
 
 
+@login_required
+def customer_purchases_create_ajax(request, pk):
+    if request.method == 'GET':
+        form = forms.PurchaseForm()
+        context = { 'form': form }
+
+        return render_ajax_response(
+                template='customers/detail/purchases/partial/form.html',
+                request=request,
+                context=context)
+
+    elif request.method == 'POST':
+        form = forms.PurchaseForm(request.POST)
+
+        if form.is_valid():
+            customer = get_object_or_404(Customer, pk=pk)
+            purchase = form.save(commit=False)
+            purchase.user = request.user
+            purchase.customer = customer
+            purchase.save()
+            return redirect('customers:purchases_ajax', pk=pk)
+        else:
+            return render_ajax_response(status=400, errors=form.errors)
+
+
+@login_required
+def customer_purchases_update_ajax(request, pk, purchase_pk):
+    purchase = get_object_or_404(Purchase, pk=purchase_pk)
+
+    if request.method == 'GET':
+        form = forms.PurchaseForm(instance=purchase)
+        context = { 'form': form }
+        return render_ajax_response(
+                template='customers/detail/purchases/partial/form.html',
+                request=request,
+                context=context)
+
+    elif request.method == 'POST':
+        form = forms.PurchaseForm(request.POST, instance=purchase)
+        if form.is_valid():
+            form.save()
+            return redirect('customers:purchases_ajax', pk=pk)
+        else:
+            return render_ajax_response(status=400, errors=form.errors)
+
+
 def get_customer_list_context():
     context = {}
     context['customers'] = []
@@ -184,8 +230,7 @@ def get_customer_info_context(pk):
     customer = get_object_or_404(Customer, pk=pk)
     return {
         'customer': customer,
-        'tab_active': 'info',}
-        # 'form': forms.CustomerUpdateForm(instance=customer) }
+        'tab_active': 'info' }
 
 
 def get_customer_contacts_context(pk):
@@ -200,10 +245,12 @@ def get_customer_contacts_context(pk):
 
 def get_customer_purchases_context(pk):
     customer = get_object_or_404(Customer,pk=pk)
-
+    purchases = customer.purchase_set.order_by('-purchase_date', '-updated_at')
     return {
         'customer': customer,
-        'tab_active': 'purchases', }
+        'tab_active': 'purchases',
+        'purchases': purchases,
+        'purchases_count': customer.purchase_set.count() }
 
 
 def render_ajax_response(template=None, request=None, context=None, status=200, errors=None):

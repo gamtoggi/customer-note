@@ -1,0 +1,59 @@
+<form class="js-form" action="{{ request.path }}" method="post">
+  {% csrf_token %}
+  <table class="table info-table is-fullwidth">
+    <tr>
+      <th>제품명</th>
+      <td>
+        <div class="field">
+          <input type="text" class="input is-small is-fullwidth" name="name" value="{{ form.name.value|default:'' }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>수량</th>
+      <td>
+        <div class="field">
+          <input type="number" class="input is-small is-fullwidth" name="count" value="{{ form.count.value }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>단가</th>
+      <td>
+        <div class="field">
+          <input type="number" class="input is-small is-fullwidth" name="unit_price" value="{{ form.unit_price.value }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>구매일</th>
+      <td>
+        <div class="field">
+          <input type="date" class="input is-small is-fullwidth" name="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d' }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>다음 구매일정</th>
+      <td>
+        <div class="field">
+          <input type="date" class="input is-small is-fullwidth" name="next_purchase_date" value="{{ form.next_purchase_date.value|date:'Y-m-d' }}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>재구매 완료</th>
+      <td>
+        <div class="field">
+          <input type="checkbox" class="checkbox" name="is_repurchased" value="{{ form.is_repurchased.value }}">
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div>
+    <button class="button is-primary is-small is-pulled-right">저장</button>
+    <div class="js-edit-cancel">
+      <p class="button is-white is-small is-pulled-right">취소</p>
+    </div>
+  </div>
+</form>

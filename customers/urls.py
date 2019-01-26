@@ -33,11 +33,17 @@ urlpatterns = [
     # /customers/1/contacts/1/update/ajax
     path('<int:pk>/contacts/<int:contact_pk>/update/ajax', views.customer_contacts_update_ajax, name='contacts_update_ajax'),
 
-    # /customers/1/purchase
+    # /customers/1/purchases
     path('<int:pk>/purchases', views.customer_purchases, name='purchases'),
 
-    # /customers/1/purchase/ajax
+    # /customers/1/purchases/ajax
     path('<int:pk>/purchases/ajax', views.customer_purchases_ajax, name='purchases_ajax'),
+
+    # /customers/1/purchases/create/ajax
+    path('<int:pk>/purchases/create/ajax', views.customer_purchases_create_ajax, name='purchases_create_ajax'),
+
+    # /customers/1/purchases/1/update/ajax
+    path('<int:pk>/purchases/<int:purchase_pk>/update/ajax', views.customer_purchases_update_ajax, name='purchases_update_ajax'),
 
 
 ]

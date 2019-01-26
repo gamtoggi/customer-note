@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, Contact
+from .models import Customer, Contact, Purchase
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -47,3 +47,15 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ('contacted_at', 'memo',)
+
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = (
+                'name',
+                'count',
+                'unit_price',
+                'purchase_date',
+                'next_purchase_date',
+                'is_repurchased', )

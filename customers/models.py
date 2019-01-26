@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 from users.models import User
 
@@ -43,3 +44,22 @@ class Contact(models.Model):
 
     def __str__(self):
         return '[{}] {}:{}'.format(self.pk, self.customer.name, self.memo)
+
+
+class Purchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    count = models.PositiveSmallIntegerField(default=1)
+    unit_price = models.PositiveSmallIntegerField(default=0)
+    purchase_date = models.DateField(default=datetime.now)
+    next_purchase_date = models.DateField(null=True, blank=True)
+    is_repurchased = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '[{}] {}:{}'.format(self.pk, self.customer.name, self.name)
+
+    def get_total_price(self):
+        return self.count * self.unit_price

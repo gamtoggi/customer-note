@@ -1,3 +1,52 @@
 {% include '../../common/partial/header.html' %}
 
-purchases
+<!-- Add Purchase -->
+<div class="padding10box">
+  <div class="container">
+    <div class="js-partial-btn" data-url="{% url 'customers:purchases_create_ajax' customer.pk %}" data-target=".js-new-form-container">
+      <a class="has-text-weight-bold has-text-primary">+ 구매 기록 추가</a>
+    </div>
+    <p><small class="has-text-grey">총 {{ purchases_count|default:0 }} 건</small></p>
+  </div>
+
+  <!-- help message -->
+  <div id="help-container">
+    {% if purchases_count == 0 %}
+    <div class="helpbox has-text-centered">
+      <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+      <p class="has-text-grey-light is-size-7">고객이 어떤 품목을 구매했는지 기록하여</p>
+      <p class="has-text-grey-light is-size-7">구매 패턴을 파악하고</p>
+      <p class="has-text-grey-light is-size-7">다음 구매 일정을 등록하세요.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- form -->
+<div class="js-new-form-container"></div>
+
+<!-- purchase list -->
+<div class="padding10box">
+  <div>
+    {% for purchase in purchases %}
+    <div class="contact-box">
+      <div class="js-edit" data-url="{% url 'customers:purchases_update_ajax' purchase.customer.pk purchase.pk %}">
+        <div class="js-info-container">
+          <h6>{{ purchase.name }}{% if purchase.count > 1 %} x{{ purchase.count }}{% endif %}</h6>
+          <small>총 {{ purchase.get_total_price }}원</small>
+          <div>
+            <p><b>구매일</b> {{ purchase.purchase_date|date:'Y-m-d' }}</p>
+            {% if purchase.next_purchase_date is not None %}
+            <p><b>다음 구매일정</b> {{ purchase.next_purchase_date|date:'Y-m-d' }}</p>
+            <progress class="progress is-primary" value="15" max="100">15%</progress>
+            <button class="button">재구매 완료</button>
+            {% endif %}
+          </div>
+        </div>
+        <div class="js-form-container"></div>
+      </div>
+    </div>
+    {% endfor %}
+    <br>
+  </div>
+</div>
