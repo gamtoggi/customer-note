@@ -74,7 +74,7 @@
           {% for purchase in customer.purchases %}
           <div>
             <small>{{ purchase.name }}</small>
-            <progress class="small-progress progress is-primary is-small is-pulled-right" value="15" max="100">15</progress>
+            <progress class="small-progress progress is-primary is-small is-pulled-right" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
           </div>
           {% endfor %}
         </div>

@@ -38,7 +38,10 @@
             <p><b>구매일</b> {{ purchase.purchase_date|date:'Y-m-d' }}</p>
             {% if purchase.next_purchase_date is not None %}
             <p><b>다음 구매일정</b> {{ purchase.next_purchase_date|date:'Y-m-d' }}</p>
-            <progress class="progress is-primary" value="15" max="100">15%</progress>
+            <div class="progress-wrapper">
+              <progress class="progress is-primary" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+              <p class="progress-value has-text-white">{{ purchase.get_next_purchase_progress_value }}일 남음</p>
+            </div>
             <button class="button">재구매 완료</button>
             {% endif %}
           </div>

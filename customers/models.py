@@ -84,3 +84,27 @@ class Purchase(models.Model):
 
     def get_total_price(self):
         return self.count * self.unit_price
+
+    def get_next_purchase_progress(self):
+        if self.next_purchase_date != None and self.is_repurchased == False:
+            max = (self.next_purchase_date - self.purchase_date).days
+            value = (self.next_purchase_date - datetime.now().date()).days
+            return { 'max': max, 'value': value }
+        else:
+            return None
+
+
+    def get_next_purchase_progress_max(self):
+        progress = self.get_next_purchase_progress()
+        if progress != None:
+            return progress['max']
+        else:
+            return None
+
+
+    def get_next_purchase_progress_value(self):
+        progress = self.get_next_purchase_progress()
+        if progress != None:
+            return progress['value']
+        else:
+            return None
