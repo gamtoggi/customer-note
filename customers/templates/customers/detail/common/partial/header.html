@@ -1,7 +1,7 @@
 
     <!-- top links -->
     <div class="js-partial-btn" data-url="{% url 'customers:list_ajax' %}" data-target="#page-container">
-      <button class="delete is-pulled-right is-medium"></button>
+      <p class="delete is-pulled-right"></p>
     </div>
 
     <section class="section">
@@ -32,6 +32,20 @@
       <!-- tabs -->
       <div class="tabs is-centered is-boxed">
         <ul>
+          <li {% if tab_active == 'purchases' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>구매 기록</small></span>
+              </a>
+            </div>
+          </li>
+          <li {% if tab_active == 'contacts' %}class="is-active"{% endif %}>
+            <div class="js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}" data-target="#page-container">
+              <a>
+                <span><small>연락 기록</small></span>
+              </a>
+            </div>
+          </li>
           <li {% if tab_active == 'info' %}class="is-active"{% endif %}>
             <div class="js-partial-btn" data-url="{% url 'customers:info_ajax' customer.pk %}" data-target="#page-container">
               <a>
@@ -39,24 +53,10 @@
               </a>
             </div>
           </li>
-          <li {% if tab_active == 'purchases' %}class="is-active"{% endif %}>
-            <div class="js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}" data-target="#page-container">
-              <a>
-                <span><small>구매 관리</small></span>
-              </a>
-            </div>
-          </li>
-          <li {% if tab_active == 'contacts' %}class="is-active"{% endif %}>
-            <div class="js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}" data-target="#page-container">
-              <a>
-                <span><small>연락 관리</small></span>
-              </a>
-            </div>
-          </li>
-
-
         </ul>
       </div>
       <!-- end of tabs -->
 
     </div>
+
+    <div class="brbox"></div>

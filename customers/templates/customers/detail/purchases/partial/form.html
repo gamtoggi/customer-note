@@ -1,59 +1,85 @@
-<form class="js-form" action="{{ request.path }}" method="post">
-  {% csrf_token %}
-  <table class="table info-table is-fullwidth">
-    <tr>
-      <th>제품명</th>
-      <td>
-        <div class="field">
-          <input type="text" class="input is-small is-fullwidth" name="name" value="{{ form.name.value|default:'' }}">
+<div class="modal is-active">
+  <div class="js-hide-btn modal-background" data-target=".modal"></div>
+  <div class="modal-content confirm-modal">
+    <div class="box form-container">
+      <div class="subtitle">
+        {{ title }}
+      </div>
+      <form class="js-form" action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <table class="table info-table is-fullwidth">
+          <tr>
+            <th class="purchase">제품명</th>
+            <td>
+              <div class="field">
+                <input type="text" class="input is-small is-fullwidth" name="name" value="{{ form.name.value|default:'' }}">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>수량</th>
+            <td>
+              <div class="field">
+                <input type="number" class="input is-small is-fullwidth" name="count" value="{{ form.count.value }}">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>단가</th>
+            <td>
+              <div class="field">
+                <input type="number" class="input is-small is-fullwidth" name="unit_price" value="{{ form.unit_price.value }}">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>구매일자</th>
+            <td>
+              <div class="field">
+                <input type="date" class="input is-small is-fullwidth" name="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d' }}">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+              <div class="field has-text-right">
+                <label class="checkbox">
+                  <b>재구매 일정 등록</b>
+                  <input type="checkbox" class="checkbox js-toggle-checkbox js-next-purchase-checkbox" data-target=".next-purchase-container" {% if form.next_purchase_date.value != None %}checked{% endif %}>
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr class="next-purchase-container {% if form.next_purchase_date.value == None %}is-hidden{% endif %}">
+            <th>재구매 일정</th>
+            <td>
+              <div class="field">
+                <input type="date" id="js-next-purcase-input"class="input is-small is-fullwidth" name="next_purchase_date" value="{{ form.next_purchase_date.value|date:'Y-m-d' }}">
+              </div>
+            </td>
+          </tr>
+        </table>
+        <div>
+          <button class="button is-primary is-small2">저장</button>
+          <span class="js-hide-btn" data-target=".modal">
+            <span class="js-show-btn" data-target="#help-container">
+              <span class="button  is-small2 has-text-grey">취소</span>
+            </span>
+          </span>
         </div>
-      </td>
-    </tr>
-    <tr>
-      <th>수량</th>
-      <td>
-        <div class="field">
-          <input type="number" class="input is-small is-fullwidth" name="count" value="{{ form.count.value }}">
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>단가</th>
-      <td>
-        <div class="field">
-          <input type="number" class="input is-small is-fullwidth" name="unit_price" value="{{ form.unit_price.value }}">
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>구매일</th>
-      <td>
-        <div class="field">
-          <input type="date" class="input is-small is-fullwidth" name="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d' }}">
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>다음 구매일정</th>
-      <td>
-        <div class="field">
-          <input type="date" class="input is-small is-fullwidth" name="next_purchase_date" value="{{ form.next_purchase_date.value|date:'Y-m-d' }}">
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>재구매 완료</th>
-      <td>
-        <div class="field">
-          <input type="checkbox" class="checkbox" name="is_repurchased" value="{{ form.is_repurchased.value }}">
-        </div>
-      </td>
-    </tr>
-  </table>
-  <div>
-    <button class="button is-primary is-small is-pulled-right">저장</button>
-    <div class="js-edit-cancel">
-      <p class="button is-white is-small is-pulled-right">취소</p>
+      </form>
     </div>
   </div>
-</form>
+</div>
+
+<script>
+$(function(){
+  $('.js-next-purchase-checkbox').change(function(){
+    var checked = $(this).is(':checked');
+    if (checked == false) {
+      $('#js-next-purcase-input').val(null);
+    }
+  });
+});
+</script>

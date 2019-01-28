@@ -74,13 +74,21 @@ html, body, main {
   background-color: rgba(10, 10, 10, 0.1);
 }
 
+
+
 .info-table th {
   width: 70px;
   font-size: 14px;
+  border: 0;
+}
+
+.info-table th.purchase {
+  width: 90px;
 }
 
 .info-table td {
   font-size: 13px;
+  border: 0;
 }
 
 .contact-type-dropdown {
@@ -101,9 +109,16 @@ html, body, main {
 }
 
 .small-progress {
-  width: 120px;
+  width: 140px;
   display:inline-flex;
+  height: 6px;
+  vertical-align: middle;
 }
+
+.purchase-progress {
+  height: 10px;
+}
+
 
 /* https://stackoverflow.com/questions/50400219/bulma-progress-text-in-middle */
 .progress-wrapper {
@@ -142,4 +157,41 @@ html, body, main {
 
 .brbox {
   height: 30px;
+}
+
+li.is-active span {
+  color: black;
+  font-weight: bold;
+}
+
+.full-table {
+  width: 100%
+}
+
+.full-table td {
+  display: table-cell;
+  width: 100%
+}
+
+.purchase-box {
+  padding: 10px;
+  border-bottom: 1px solid #efefef;
+}
+
+.purchase-box .purchase-name {
+  font-size: 14px;
+  margin: 6px 0 6px;
+}
+
+.purchase-box .purchase-revenue {
+  font-size: 11px;
+}
+
+.purchase-box .purchase-date {
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.purchase-progress-container {
+  margin-top: 6px;
 }

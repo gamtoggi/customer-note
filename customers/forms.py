@@ -59,3 +59,9 @@ class PurchaseForm(forms.ModelForm):
                 'purchase_date',
                 'next_purchase_date',
                 'is_repurchased', )
+
+
+class PurchaseIsRepurchasedForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = ('is_repurchased', )

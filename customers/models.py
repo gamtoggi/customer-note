@@ -35,7 +35,7 @@ class Customer(models.Model):
             return -1
 
     def get_waiting_next_purchases(self):
-        return self.purchase_set.filter(next_purchase_date__isnull=False, is_repurchased=False).order_by('-purchase_date', '-updated_at')
+        return self.purchase_set.filter(next_purchase_date__isnull=False, is_repurchased=False).order_by('next_purchase_date')
 
 
     def get_summary(self):
@@ -46,6 +46,7 @@ class Customer(models.Model):
             'purchases': self.get_waiting_next_purchases()
         }
 
+
     def get_address(self):
         str = '';
         if self.address1 != None:
@@ -53,6 +54,20 @@ class Customer(models.Model):
         if self.address2 != None:
             str += ' ' + self.address2
         return str
+
+
+    def get_month_purchases(self):
+        mon = datetime.now().month
+        return self.purchase_set.filter(purchase_date__month=mon)
+
+
+    def get_month_revenue(self):
+        purchases = self.get_month_purchases()
+        revenue = 0
+        for p in purchases:
+            revenue += p.get_total_price()
+        return revenue
+
 
 
 class Contact(models.Model):

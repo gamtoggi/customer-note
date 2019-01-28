@@ -181,7 +181,8 @@ def customer_purchases_ajax(request, pk):
     context = get_customer_purchases_context(pk)
     return render_ajax_response(
             template='customers/detail/purchases/partial/purchases.html',
-            context=context)
+            context=context,
+            request=request)
 
 
 @login_required
@@ -191,7 +192,7 @@ def customer_purchases_create_ajax(request, pk):
         context = { 'form': form }
 
         return render_ajax_response(
-                template='customers/detail/purchases/partial/form.html',
+                template='customers/detail/purchases/partial/create_form.html',
                 request=request,
                 context=context)
 
@@ -217,12 +218,17 @@ def customer_purchases_update_ajax(request, pk, purchase_pk):
         form = forms.PurchaseForm(instance=purchase)
         context = { 'form': form }
         return render_ajax_response(
-                template='customers/detail/purchases/partial/form.html',
+                template='customers/detail/purchases/partial/update_form.html',
                 request=request,
                 context=context)
 
     elif request.method == 'POST':
-        form = forms.PurchaseForm(request.POST, instance=purchase)
+        if request.GET.get('form_for') == 'is_repurchased':
+            form_class = forms.PurchaseIsRepurchasedForm
+        else:
+            form_class = forms.PurchaseForm
+        form = form_class(request.POST, instance=purchase)
+
         if form.is_valid():
             form.save()
             return redirect('customers:purchases_ajax', pk=pk)
@@ -259,12 +265,13 @@ def get_customer_contacts_context(pk):
 
 def get_customer_purchases_context(pk):
     customer = get_object_or_404(Customer,pk=pk)
-    purchases = customer.purchase_set.order_by('-purchase_date', '-updated_at')
+    purchases = customer.purchase_set.order_by('-purchase_date', '-created_at')
     return {
         'customer': customer,
         'tab_active': 'purchases',
         'purchases': purchases,
-        'purchases_count': customer.purchase_set.count() }
+        'purchases_count': customer.purchase_set.count(),
+        'month_revenue': customer.get_month_revenue() }
 
 
 def render_ajax_response(template=None, request=None, context=None, status=200, errors=None):

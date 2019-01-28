@@ -9,6 +9,25 @@ function loadPartialPage(url, containerSelector) {
   });
 }
 
+
+function findElement(self, selector) {
+  if ($(selector).length > 0) {
+    return $(selector);
+  }
+  if (self.children(selector).length > 0) {
+    self.children(selector).html('');
+  }
+  else if (self.find(selector).length > 0) {
+    self.find(selector).html('');
+  }
+  else if (self.closest(selector).length) {
+    self.closest(selector).html('');
+  }
+
+  alert('Can not find ' + target);
+  return null;
+}
+
 $(function(){
 
   // Navibar toggle
@@ -37,28 +56,30 @@ $(function(){
 
 
   /*
+    <Element 보이기>
+    class : js-show-btn
+    event : click
+    attr : data-target
+  */
+  $('#page-container').on('click', '.js-show-btn', function(){
+    var target = findElement($(this), $(this).attr('data-target'));
+    if (target != null) {
+      target.removeClass('is-hidden');
+    }
+  });
+
+
+  /*
     <Element 감추기>
     class : js-hide-btn
     event : click
     attr : data-target
   */
   $('#page-container').on('click', '.js-hide-btn', function(){
-    var target = $(this).attr('data-target');
-
-    if ($(this).children(target).length > 0) {
-      $(this).children(target).addClass('is-hidden');
+    var target = findElement($(this), $(this).attr('data-target'));
+    if (target != null) {
+      target.addClass('is-hidden');
     }
-    else if ($(this).find(target).length > 0) {
-      $(this).find(target).addClass('is-hidden');
-    }
-    else if ($(this).closest(target).length) {
-      $(this).closest(target).addClass('is-hidden');
-    }
-    else {
-      alert('Can not find ' + target);
-    }
-
-    return false;
   });
 
 
@@ -69,22 +90,33 @@ $(function(){
     attr : data-target
   */
   $('#page-container').on('click', '.js-clear-btn', function(){
-    var target = $(this).attr('data-target');
+    var target = findElement($(this), $(this).attr('data-target'));
+    if (target != null) {
+      target.html('');
+    }
+  });
 
-    if ($(this).children(target).length > 0) {
-      $(this).children(target).html('');
-    }
-    else if ($(this).find(target).length > 0) {
-      $(this).find(target).html('');
-    }
-    else if ($(this).closest(target).length) {
-      $(this).closest(target).html('');
-    }
-    else {
-      alert('Can not find ' + target);
-    }
 
-    return false;
+
+  /*
+    <checkbox toggle>
+    class : js-toggle-checkbox
+    event : change
+    attr : data-target
+  */
+  $('#page-container').on('change', '.js-toggle-checkbox', function(){
+    var target = findElement($(this), $(this).attr('data-target'));
+
+    if (target != null) {
+      var checked = $(this).is(':checked');
+      
+      if (checked) {
+        target.removeClass('is-hidden');
+      }
+      else {
+        target.addClass('is-hidden');
+      }
+    }
   });
 
 

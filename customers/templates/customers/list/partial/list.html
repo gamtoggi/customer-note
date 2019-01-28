@@ -15,7 +15,7 @@
   </div>
   <!-- 정렬 버튼 -->
   <div class="column is-narrow">
-    <button class="button">
+    <button class="button is-white">
       <span class="icon is-left">
         <i class="fas fa-ellipsis-h"></i>
       </span>
@@ -54,7 +54,7 @@
   <div class="padding10box">
     <div>
       {% for customer in customers %}
-      <div class="js-partial-btn" data-url="{% url 'customers:info_ajax' customer.pk %}" data-target="#page-container">
+      <div class="js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}" data-target="#page-container">
         <div class="customer-list-item">
           <div>
             <span class="icon">
@@ -71,12 +71,19 @@
               {% endif %}
             </small>
           </div>
+          <table class="full-table">
           {% for purchase in customer.purchases %}
-          <div>
-            <small>{{ purchase.name }}</small>
-            <progress class="small-progress progress is-primary is-small is-pulled-right" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
-          </div>
+            <tr>
+              <!-- <th class="has-text-primary">-</th> -->
+              <td>
+                <small>{{ purchase.name }}</small>
+              </td>
+              <td>
+                <progress class="small-progress progress is-primary" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+              </td>
+            </tr>
           {% endfor %}
+          </table>
         </div>
       </div>
       {% endfor %}

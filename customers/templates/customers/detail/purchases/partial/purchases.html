@@ -1,12 +1,29 @@
 {% include '../../common/partial/header.html' %}
+{% load humanize %}
+
+<div class="padding10box">
+  <form action="">
+    <div class="field">
+      <div class="control has-icons-left">
+        <input type="search" class="input is-rounded is-small" placeholder="구매 기록 검색">
+        <span class="icon is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
 
 <!-- Add Purchase -->
 <div class="padding10box">
   <div class="container">
-    <div class="js-partial-btn" data-url="{% url 'customers:purchases_create_ajax' customer.pk %}" data-target=".js-new-form-container">
-      <a class="has-text-weight-bold has-text-primary">+ 구매 기록 추가</a>
+    <div class="js-partial-btn" data-url="{% url 'customers:purchases_create_ajax' customer.pk %}" data-target="#js-form-container">
+      <div class="js-hide-btn" data-target="#help-container">
+        <a class="has-text-weight-bold has-text-primary">+ 구매 기록 추가</a>
+      </div>
+
     </div>
-    <p><small class="has-text-grey">총 {{ purchases_count|default:0 }} 건</small></p>
+    <p><small class="has-text-grey is-size-7">이번 달 {{ month_revenue|default:0|intcomma }}원</small></p>
   </div>
 
   <!-- help message -->
@@ -23,32 +40,56 @@
 </div>
 
 <!-- form -->
-<div class="js-new-form-container"></div>
+<div id="js-form-container"></div>
 
 <!-- purchase list -->
 <div class="padding10box">
   <div>
     {% for purchase in purchases %}
-    <div class="contact-box">
-      <div class="js-edit" data-url="{% url 'customers:purchases_update_ajax' purchase.customer.pk purchase.pk %}">
+    <div class="purchase-box">
+      <div class="js-partial-btn" data-url="{% url 'customers:purchases_update_ajax' purchase.customer.pk purchase.pk %}" data-target="#js-form-container">
         <div class="js-info-container">
-          <h6>{{ purchase.name }}{% if purchase.count > 1 %} x{{ purchase.count }}{% endif %}</h6>
-          <small>총 {{ purchase.get_total_price }}원</small>
-          <div>
-            <p><b>구매일</b> {{ purchase.purchase_date|date:'Y-m-d' }}</p>
-            {% if purchase.next_purchase_date is not None %}
-            <p><b>다음 구매일정</b> {{ purchase.next_purchase_date|date:'Y-m-d' }}</p>
-            <div class="progress-wrapper">
-              <progress class="progress is-primary" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
-              <p class="progress-value has-text-white">{{ purchase.get_next_purchase_progress_value }}일 남음</p>
+          <div class="purchase-name">
+            <p><b>{{ purchase.name }}{% if purchase.count > 0 %} ({{ purchase.count }}){% endif %}</b></p>
+          </div>
+
+          <p class="purchase-revenue">총 {{ purchase.get_total_price|intcomma }}원</p>
+          <div class="purchase-date">
+            <p><b>구매일자</b> {{ purchase.purchase_date }}</p>
+
+            {% if purchase.next_purchase_date is not None and purchase.is_repurchased is False %}
+            <p><b>재구매 일정</b> {{ purchase.next_purchase_date }}</p>
+
+            <div class="purchase-progress-container">
+              <div class="progress-wrapper">
+                <progress class="progress is-primary is-small" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+
+                {% if purchase.get_next_purchase_progress_value > 0 %}
+                  <p class="progress-value has-text-white">{{ purchase.get_next_purchase_progress_value }}일 후 재구매</p>
+                {% elif purchase.get_next_purchase_progress_value == 0 %}
+                  <p class="progress-value has-text-white">오늘 재구매</p>
+                {% else %}
+                  <p class="progress-value has-text-white">재구매 일정이 지났습니다</p>
+                {% endif %}
+              </div>
             </div>
-            <button class="button">재구매 완료</button>
+
+
             {% endif %}
+
           </div>
         </div>
-        <div class="js-form-container"></div>
       </div>
+
+      {% if purchase.next_purchase_date is not None and purchase.is_repurchased is False %}
+      <form class="js-form" action="{% url 'customers:purchases_update_ajax' customer.pk purchase.pk %}?form_for=is_repurchased" method='post'>
+        {% csrf_token %}
+        <input type="hidden" name="is_repurchased" value=true>
+        <button class="button is-small">재구매 완료</button>
+      </form>
+      {% endif %}
     </div>
+
     {% endfor %}
     <br>
   </div>
