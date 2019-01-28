@@ -1,0 +1,19 @@
+<div class="modal is-active">
+  <div class="js-hide-btn modal-background" data-target=".modal"></div>
+  <div class="modal-content confirm-modal">
+    <div class="box">
+      <form class="js-form" action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <p>정말로 고객을 삭제하시겠습니까?</p>
+        <div class="brbox"></div>
+        <div class="has-text-right">
+          <span class="js-hide-btn" data-target=".modal">
+            <span class="button">취소</span>
+          </span>
+          <button class="button is-danger">삭제</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>

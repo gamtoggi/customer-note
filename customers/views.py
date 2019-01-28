@@ -82,6 +82,20 @@ def get_customer_partial_form_class(field):
 
 
 @login_required
+def customer_delete_ajax(request, pk):
+    if request.method == 'GET':
+        return render_ajax_response(
+                template='customers/detail/info/partial/delete.html',
+                request=request)
+
+
+    elif request.method == 'POST':
+        customer = get_object_or_404(Customer, pk=pk)
+        customer.delete()
+        return redirect('customers:list_ajax')
+
+
+@login_required
 def customer_info(request, pk):
     context = get_customer_info_context(pk)
     return render(request, 'customers/detail/info/index.html', context)

@@ -15,6 +15,9 @@ urlpatterns = [
     # /customers/1/update/ajax
     path('<int:pk>/update/ajax', views.customer_update_ajax, name='update_ajax'),
 
+    # /customers/1/delete/ajax
+    path('<int:pk>/delete/ajax', views.customer_delete_ajax, name='delete_ajax'),
+
     # /customers/1/info
     path('<int:pk>/info', views.customer_info, name='info'),
 
