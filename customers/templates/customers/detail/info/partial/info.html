@@ -2,21 +2,16 @@
 
 <!-- Contact buttons -->
 <div class="has-text-centered">
-  <button class="button is-white is-large">
+  <a class="button is-white is-large" {% if customer.phone != None %}href="tel:{{ customer.phone }}"{% endif %}>
     <span class="icon">
-      <i class="fas fa-phone has-text-primary"></i>
+      <i class="fas fa-phone {% if customer.phone != None %}has-text-primary{% else %}has-text-grey-lighter{% endif %}"></i>
     </span>
-  </button>
-  <button class="button is-white is-large">
+  </a>
+  <a class="button is-white is-large" {% if customer.phone != None %}href="sms:{{ customer.phone }}"{% endif %}>
     <span class="icon">
-      <i class="fas fa-sms has-text-primary"></i>
+      <i class="fas fa-sms {% if customer.phone != None %}has-text-primary{% else %}has-text-grey-lighter{% endif %}"></i>
     </span>
-  </button>
-  <button class="button is-white is-large">
-    <span class="icon">
-      <i class="fas fa-comments has-text-primary"></i>
-    </span>
-  </button>
+  </a>
 </div>
 
 <!-- info -->
@@ -27,4 +22,8 @@
   {% include './info_row.html' with label='메모' name='memo' value=customer.memo|default:'' %}
 </table>
 
-<a href="#" class="is-pulled-right is-size-6">고객 삭제</a>
+<div class="js-partial-btn" data-url="{% url 'customers:delete_ajax' customer.pk %}" data-target="#delete-modal-container">
+  <p class="button is-text is-pulled-right has-text-danger is-small">삭제</p>
+</div>
+
+<div id="delete-modal-container"></div>
