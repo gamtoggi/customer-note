@@ -46,15 +46,15 @@
 <div class="padding10box">
   <div>
     {% for purchase in purchases %}
-    <div class="purchase-box">
+    <div class="info-box">
       <div class="js-partial-btn" data-url="{% url 'customers:purchases_update_ajax' purchase.customer.pk purchase.pk %}" data-target="#js-form-container">
         <div class="js-info-container">
-          <div class="purchase-name">
+          <div class="info-title">
             <p><b>{{ purchase.name }}{% if purchase.count > 0 %} ({{ purchase.count }}){% endif %}</b></p>
           </div>
 
-          <p class="purchase-revenue">총 {{ purchase.get_total_price|intcomma }}원</p>
-          <div class="purchase-date">
+          <p class="info-small">총 {{ purchase.get_total_price|intcomma }}원</p>
+          <div class="info-content">
             <p><b>구매일자</b> {{ purchase.purchase_date }}</p>
 
             {% if purchase.next_purchase_date is not None and purchase.is_repurchased is False %}

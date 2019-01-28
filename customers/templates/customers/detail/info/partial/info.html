@@ -15,15 +15,18 @@
 </div>
 
 <!-- info -->
-<table class="table is-fullwidth info-table">
-  {% include './info_row.html' with label='전화' name='phone' value=customer.phone|default:'' %}
-  {% include './info_row.html' with label='주소' name='address' value=customer.get_address|default:'' %}
-  {% include './info_row.html' with label='생일' name='birthday' value=customer.birthday|default:'' %}
-  {% include './info_row.html' with label='메모' name='memo' value=customer.memo|default:'' %}
-</table>
+<section class="section">
+  <table class="table is-fullwidth info-table is-hoverable">
+    {% include './info_row.html' with label='전화' name='phone' value=customer.phone|default:'' %}
+    {% include './info_row.html' with label='주소' name='address' value=customer.get_address|default:'' %}
+    {% include './info_row.html' with label='생일' name='birthday' value=customer.birthday|default:'' %}
+    {% include './info_row.html' with label='메모' name='memo' value=customer.memo|default:'' %}
+  </table>
+
+</section>
 
 <div class="js-partial-btn" data-url="{% url 'customers:delete_ajax' customer.pk %}" data-target="#delete-modal-container">
-  <p class="button is-text is-pulled-right has-text-danger is-small">삭제</p>
+  <p class="button is-white is-pulled-right has-text-danger is-small">고객 삭제</p>
 </div>
 
 <div id="delete-modal-container"></div>

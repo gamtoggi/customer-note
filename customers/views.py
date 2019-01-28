@@ -130,7 +130,7 @@ def customer_contacts_create_ajax(request, pk):
         context = { 'form': form }
 
         return render_ajax_response(
-                template='customers/detail/contacts/partial/form.html',
+                template='customers/detail/contacts/partial/create_form.html',
                 request=request,
                 context=context)
 
@@ -156,7 +156,7 @@ def customer_contacts_update_ajax(request, pk, contact_pk):
         form = forms.ContactForm(instance=contact)
         context = { 'form': form }
         return render_ajax_response(
-                template='customers/detail/contacts/partial/form.html',
+                template='customers/detail/contacts/partial/update_form.html',
                 request=request,
                 context=context)
 

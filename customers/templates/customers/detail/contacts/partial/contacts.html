@@ -16,7 +16,7 @@
 <!-- Add Customer -->
 <div class="padding10box">
   <div class="container">
-    <div class="js-partial-btn" data-url="{% url 'customers:contacts_create_ajax' customer.pk %}" data-target=".js-new-form-container">
+    <div class="js-partial-btn" data-url="{% url 'customers:contacts_create_ajax' customer.pk %}" data-target="#js-form-container">
       <a class="has-text-weight-bold has-text-primary">+ 연락 기록 추가</a>
     </div>
     <p><small class="has-text-grey is-size-7">총 {{ contacts_count|default:0 }} 건</small></p>
@@ -36,32 +36,15 @@
 </div>
 
 <!-- form -->
-<div class="js-new-form-container"></div>
+<div id="js-form-container"></div>
 
 <div class="padding10box">
   <div>
     {% for contact in contacts %}
-    <div class="contact-box">
-      <div class="js-edit" data-url="{% url 'customers:contacts_update_ajax' contact.customer.pk contact.pk %}">
-        <div class="js-info-container">
-          <table class="contact-table">
-            <tr>
-              <th>
-                <span class="icon is-small">
-                  <i class="fas fa-comments has-text-primary"></i>
-                </span>
-              </th>
-              <td>{{ contact.contacted_at }}</td>
-            </tr>
-            <tr>
-              <th></th>
-              <td>
-                {{ contact.memo }}
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="js-form-container"></div>
+    <div class="info-box">
+      <div class="js-partial-btn" data-url="{% url 'customers:contacts_update_ajax' contact.customer.pk contact.pk %}" data-target="#js-form-container">
+        <p class="info-title"><b>{{ contact.contacted_at }}</b></p>
+        <p class="info-content">{{ contact.memo }}</p>
       </div>
     </div>
     {% endfor %}

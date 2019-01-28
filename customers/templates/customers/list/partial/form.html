@@ -1,112 +1,106 @@
 <div class="js-container">
   <div class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <form class="js-form" action="{{ request.path }}" method="post">
-        {% csrf_token %}
-        <header class="modal-card-head">
-          <p class="modal-card-title">고객 추가</p>
-        </header>
-        <section class="modal-card-body">
-          <div>
-            <table class="table is-fullwidth is-hoverable is-borderless">
-              <tbody>
-                <!-- Name -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small">이름*</label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-small" type="text" name="name" required placeholder="">
-                      </div>
+    <div class="js-hide-btn modal-background" data-target=".js-container"></div>
+    <div class="modal-content confirm-modal">
+      <div class="box">
+        <form class="js-form" action="{{ request.path }}" method="post">
+          {% csrf_token %}
+          <p class="subtitle">고객 추가</p>
+          <table class="table info-table is-fullwidth is-hoverable is-borderless">
+            <tbody>
+              <!-- Name -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">이름*</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="name" required placeholder="">
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
 
-                <!-- Phone -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small">전화번호</label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-small" type="text" name="phone" placeholder="">
-                      </div>
+              <!-- Phone -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">전화번호</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="phone" placeholder="">
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
 
 
-                <!-- 주소1 -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small">주소</label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-small" type="text" name="address1" placeholder="예: 경기도 성남시 분당구 판교동">
-                      </div>
+              <!-- 주소1 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">주소</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="address1" placeholder="예: 경기도 성남시 분당구 판교동">
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
 
 
-                <!-- 주소2 -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small"></label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-small" type="text" name="address2" placeholder="예: 장미아파트 123동 456호">
-                      </div>
+              <!-- 주소2 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small"></label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="text" name="address2" placeholder="예: 장미아파트 123동 456호">
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
 
-                <!-- 생일 -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small">생일</label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <input class="input is-small" type="date" name="birthday" placeholder="">
-                      </div>
+              <!-- 생일 -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">생일</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <input class="input is-small" type="date" name="birthday" placeholder="">
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
 
-                <!-- Text Area -->
-                <tr>
-                  <th class="is-narrow">
-                    <label class="label is-small">메모</label>
-                  </th>
-                  <td>
-                    <div class="field">
-                      <div class="control">
-                        <textarea class="textarea is-small" name="memo" cols="30" rows="3"></textarea>
-                      </div>
+              <!-- Text Area -->
+              <tr>
+                <th class="is-narrow">
+                  <label class="label is-small">메모</label>
+                </th>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <textarea class="textarea is-small" name="memo" cols="30" rows="3"></textarea>
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <button class="button is-primary" type="submit">저장</button>
-          <div class="js-hide-btn" data-target=".js-container">
-            <p class="button">취소</p>
-          </div>
-        </footer>
-      </form>
+          <span class="js-hide-btn" data-target=".js-container">
+            <span class="button">취소</span>
+          </span>
+        </form>
+      </div>
     </div>
   </div>
 </div>

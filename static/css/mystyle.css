@@ -173,21 +173,21 @@ li.is-active span {
   width: 100%
 }
 
-.purchase-box {
+.info-box {
   padding: 10px;
   border-bottom: 1px solid #efefef;
 }
 
-.purchase-box .purchase-name {
+.info-box .info-title {
   font-size: 14px;
   margin: 6px 0 6px;
 }
 
-.purchase-box .purchase-revenue {
+.info-box .info-small {
   font-size: 11px;
 }
 
-.purchase-box .purchase-date {
+.info-box .info-content {
   font-size: 12px;
   margin-top: 6px;
 }
