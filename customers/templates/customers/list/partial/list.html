@@ -1,47 +1,16 @@
-<div class="columns is-mobile">
-  <!-- 검색창 -->
-  <div class="column is-mobile">
-    <form action="">
-      <div class="field">
-        <div class="control has-icons-left">
-          <input type="search" class="input is-rounded" placeholder="이름, 주소, 메모...">
-          <span class="icon is-left">
-            <i class="fas fa-search"></i>
-          </span>
-        </div>
+{% load humanize %}
 
-      </div>
-    </form>
-  </div>
-  <!-- 정렬 버튼 -->
-  <div class="column is-narrow">
-    <button class="button is-white">
+<form action="">
+  <div class="field">
+    <div class="control has-icons-left">
+      <input type="search" class="input is-rounded is-small" placeholder="고객 검색 (이름, 주소, 구매물품, 메모..)">
       <span class="icon is-left">
-        <i class="fas fa-ellipsis-h"></i>
+        <i class="fas fa-search"></i>
       </span>
-    </button>
-  </div>
-</div>
-
-
-<div class="padding10box">
-  <!-- 고객 추가 버튼 -->
-  <div class="container">
-    <div class="js-partial-btn" data-url="{% url 'customers:create_ajax' %}" data-target="#form-container">
-      <a class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
     </div>
-    <p><small class="has-text-grey">총 {{ customer_count }} 명</small></p>
   </div>
+</form>
 
-  <!-- 도움말 -->
-  {% if customer_count == 0 %}
-  <div class="helpbox has-text-centered">
-    <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
-    <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
-    <p class="has-text-grey-light is-size-7">나의 고객을 추가하고, 고객 관리를 시작하세요!</p>
-  </div>
-  {% endif %}
-</div>
 
 
 <!-- 고객 추가 폼 로드 위치 -->
@@ -49,8 +18,78 @@
 </div>
 
 
+<!-- List header -->
+<div class="subsection">
+  <span class="subtitle">고객 목록</span>
+
+  <span class="is-pulled-right">
+    <div id="dropdown" class="dropdown is-right">
+      <div class="dropdown-trigger">
+        <button class="js-active-toggle-btn button is-small" aria-haspopup="true" aria-controls="dropdown-menu6" data-target="#dropdown">
+          <span>
+            {% if order == 'create'%}
+            최근 등록순
+            {% elif order == 'contact'%}
+            연락 오래된 순
+            {% elif order == 'next_purchase'%}
+            재구매 일정 순
+            {% elif order == 'total_revenue'%}
+            총 구매 금액 순
+            {% elif order == 'month_revenue'%}
+            이번 달 구매 금액 순
+            {% else %}
+            이름순
+            {% endif %}
+          </span>
+          <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu6" role="menu">
+        <div class="dropdown-content">
+          <a class="js-partial-btn dropdown-item {% if order == 'name' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=name" data-target="#page-container">이름순</a>
+          <a class="js-partial-btn dropdown-item {% if order == 'create' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=create" data-target="#page-container">최근 등록순</a>
+          <a class="js-partial-btn dropdown-item {% if order == 'next_purchase' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=next_purchase" data-target="#page-container">재구매 일정 순</a>
+          <a class="js-partial-btn dropdown-item {% if order == 'contact' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=contact" data-target="#page-container">연락 오래된 순</a>
+          <a class="js-partial-btn dropdown-item {% if order == 'total_revenue' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=total_revenue" data-target="#page-container">총 구매 금액 순</a>
+          <a class="js-partial-btn dropdown-item {% if order == 'month_revenue' %}is-active{% endif %}" data-url="{% url 'customers:list_ajax' %}?order=month_revenue" data-target="#page-container">이번 달 구매 금액 순</a>
+        </div>
+      </div>
+    </div>
+  </span>
+
+  <p><small class="has-text-grey">총 {{ customer_count }} 명</small></p>
+
+
+</div>
+
+
+
+
+<div class="padding10box">
+  <!-- 고객 추가 버튼 -->
+  <div class="fixed-bottom-right-btn2">
+    <div class="js-partial-btn" data-url="{% url 'customers:create_ajax' %}" data-target="#form-container">
+      <a class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
+    </div>
+  </div>
+
+  <!-- 도움말 -->
+  {% if customer_count == 0 %}
+  <div class="helpbox has-text-centered">
+    <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
+    <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
+    <p class="has-text-grey-light is-size-7">고객을 추가하고, 고객 관리를 시작하세요.</p>
+  </div>
+  {% endif %}
+</div>
+
+
+<div class="is-divider" data-content="OR"></div>
+
 <!-- 고객 리스트 -->
-<div id="customer-list-container">
+<div id="customer-list-container" class="mt10">
   <div class="padding10box">
     <div>
       {% for customer in customers %}
@@ -61,28 +100,56 @@
               <i class="fas fa-user-circle fa-lg has-text-primary"></i>
             </span>
             <b>{{ customer.name }}</b>
+
+            {% if order == 'total_revenue'%}
+              <small class="has-text-info">(총 {{ customer.get_total_revenue|default:0|intcomma }}원)</small>
+            {% elif order == 'month_revenue'%}
+              <small class="has-text-info">(이번달 {{ customer.get_month_revenue|default:0|intcomma }}원)</small>
+            {% endif %}
+
             <small class="is-pulled-right">
-              {% if customer.contact_ago > 0 %}
-                마지막 연락 {{ customer.contact_ago }}일 전
-              {% elif customer.contact_ago == 0 %}
-                오늘 연락함
-              {% elif customer.contact_ago < 0 %}
-                연락 기록 없음
-              {% endif %}
+              {% with customer.get_last_contact_ago as contact_ago %}
+                {% if contact_ago > 14 %}
+                  <span><i class="fas fa-circle has-text-danger"></i></span>
+                  연락 {{ contact_ago }}일 전
+                {% elif contact_ago > 7 %}
+                  <span><i class="fas fa-circle has-text-warning"></i></span>
+                  연락 {{ contact_ago }}일 전
+                {% elif contact_ago > 0 %}
+                    <span><i class="fas fa-circle has-text-success"></i></span>
+                    연락 {{ contact_ago }}일 전
+                {% elif contact_ago == 0 %}
+                  <span><i class="fas fa-circle has-text-success"></i></span>
+                  오늘 연락
+                {% elif contact_ago < 0 %}
+                  <span><i class="fas fa-circle has-text-grey-lighter"></i></span>
+                  연락 기록 없음
+                {% endif %}
+              {% endwith %}
             </small>
           </div>
           <table class="full-table">
-          {% for purchase in customer.purchases %}
-            <tr>
-              <!-- <th class="has-text-primary">-</th> -->
-              <td>
-                <small>{{ purchase.name }}</small>
-              </td>
-              <td>
-                <progress class="small-progress progress is-primary" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
-              </td>
-            </tr>
-          {% endfor %}
+          {% with customer.get_waiting_next_purchases as purchases %}
+            {% for purchase in purchases %}
+              <tr>
+                <!-- <th class="has-text-primary">-</th> -->
+                <td>
+                  <small>{{ purchase.name }}</small>
+                </td>
+                <td>
+                  <progress class="small-progress progress
+                  {% if purchase.get_next_purchase_progress_value > 7 %}
+                    is-success
+                  {% elif purchase.get_next_purchase_progress_value > 3 %}
+                    is-warning
+                  {% else %}
+                    is-danger
+                  {% endif %}
+                  " value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+                </td>
+              </tr>
+            {% endfor %}
+          {% endwith %}
           </table>
         </div>
       </div>

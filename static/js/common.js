@@ -69,6 +69,15 @@ $(function(){
   });
 
 
+  $('#page-container').on('click', '.js-active-toggle-btn', function(){
+    var target = findElement($(this), $(this).attr('data-target'));
+    if (target != null) {
+      target.toggleClass('is-active');
+    }
+  });
+
+
+
   /*
     <Element 감추기>
     class : js-hide-btn
@@ -109,7 +118,7 @@ $(function(){
 
     if (target != null) {
       var checked = $(this).is(':checked');
-      
+
       if (checked) {
         target.removeClass('is-hidden');
       }
@@ -183,5 +192,8 @@ $(function(){
     root.children('.js-form-container').html('');
     return false;
   });
+
+
+
 
 });

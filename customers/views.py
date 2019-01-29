@@ -11,13 +11,13 @@ from . import forms
 
 @login_required
 def customer_list(request):
-    context = get_customer_list_context()
+    context = get_customer_list_context(request=request)
     return render(request, 'customers/list/index.html', context)
 
 
 @login_required
 def customer_list_ajax(request):
-    context = get_customer_list_context()
+    context = get_customer_list_context(request=request)
     return render_ajax_response(
             template='customers/list/partial/list.html',
             context=context)
@@ -236,12 +236,30 @@ def customer_purchases_update_ajax(request, pk, purchase_pk):
             return render_ajax_response(status=400, errors=form.errors)
 
 
-def get_customer_list_context():
+def get_customer_list_context(request):
     context = {}
     context['customers'] = []
-    object_list = Customer.objects.order_by('-created_at')
-    for obj in object_list:
-        context['customers'].append(obj.get_summary())
+    customers = Customer.objects.filter(user=request.user)
+    order = request.GET.get('order')
+    if order == None:
+        order = 'name'
+    context['order'] = order
+
+    if order == 'create':
+        object_list = customers.order_by('-created_at')
+    elif order == 'contact':
+        object_list = Customer.order_by_old_contact(request.user.id)
+    elif order == 'next_purchase':
+        object_list = Customer.get_next_purchase_order_customers(request.user.id)
+    elif order == 'total_revenue':
+        object_list = Customer.order_by_total_revenue(request.user.id)
+    elif order == 'month_revenue':
+        object_list = Customer.order_by_month_revenue(request.user.id)
+    else:
+        object_list = customers.order_by('name')
+
+    
+    context['customers'] = object_list
     context['customer_count'] = len(object_list)
     return context
 

@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   </head>
   <body>
-    <nav class="navbar  is-fixed-top" role="navigation" aria-label="main navigation">
+    <nav class="navbar has-shadow  is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="{% url 'customers:list' %}">
-          <img src="{% static 'img/brand.png' %}" width="150" height="28">
+          <img src="{% static 'img/brand.png' %}" width="230" height="28">
         </a>
 
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -25,7 +25,7 @@
 
       <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item" href="{% url 'customers:list' %}">
+          <!-- <a class="navbar-item" href="{% url 'customers:list' %}">
             고객관리
           </a>
 
@@ -39,7 +39,7 @@
 
           <a class="navbar-item">
             게시판
-          </a>
+          </a> -->
 
         </div>
 

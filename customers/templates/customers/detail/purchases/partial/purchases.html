@@ -62,7 +62,15 @@
 
             <div class="purchase-progress-container">
               <div class="progress-wrapper">
-                <progress class="progress is-primary is-small" value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+                <progress class="progress is-small
+                {% if purchase.get_next_purchase_progress_value > 7 %}
+                  is-success
+                {% elif purchase.get_next_purchase_progress_value > 3 %}
+                  is-warning
+                {% else %}
+                  is-danger
+                {% endif %}
+                " value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
 
                 {% if purchase.get_next_purchase_progress_value > 0 %}
                   <p class="progress-value has-text-white">{{ purchase.get_next_purchase_progress_value }}일 후 재구매</p>

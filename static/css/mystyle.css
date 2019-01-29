@@ -1,7 +1,7 @@
 html, body, main {
   /* height: 100%; */
   min-height: 100%;
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7; */
 }
 
 .mainbox {
@@ -46,8 +46,7 @@ html, body, main {
 }
 
 .form-box {
-  width: 500px;
-  max-width: 500px;
+  width: 280px;
 }
 
 
@@ -194,4 +193,19 @@ li.is-active span {
 
 .purchase-progress-container {
   margin-top: 6px;
+}
+
+.subsection {
+  margin: 30px 10px;
+}
+
+
+.fixed-bottom-right-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.mt10 {
+  margin-top: 10px;
 }

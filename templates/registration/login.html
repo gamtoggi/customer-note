@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="section mainbox">
+<section class="section">
+
   <div class="box form-box has-text-centered">
     <h2 class="subtitle">로그인</h2>
 
@@ -31,8 +32,16 @@
       </div>
 
       <!-- Login button -->
-      <button type="submit" class="button is-primary">로그인</button>
+      <button type="submit" class="button is-primary is-outlined">로그인</button>
     </form>
   </div>
+</section>
+
+<section class="section has-text-centered">
+  <span class="icon">
+    <i class="helpicon fas fa-heart has-text-primary"></i>
+  </span>
+  <p class="padding10box">고객 관리 수첩 이용이 처음이신가요?</p>
+  <a href="{% url 'signup' %}" class="button is-primary is-medium">회원 가입</a>
 </section>
 {% endblock %}

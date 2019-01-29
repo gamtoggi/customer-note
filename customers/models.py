@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+import calendar
 
 from users.models import User
 
@@ -38,15 +39,6 @@ class Customer(models.Model):
         return self.purchase_set.filter(next_purchase_date__isnull=False, is_repurchased=False).order_by('next_purchase_date')
 
 
-    def get_summary(self):
-        return {
-            'pk': self.pk,
-            'name': self.name,
-            'contact_ago': self.get_last_contact_ago(),
-            'purchases': self.get_waiting_next_purchases()
-        }
-
-
     def get_address(self):
         str = '';
         if self.address1 != None:
@@ -57,8 +49,9 @@ class Customer(models.Model):
 
 
     def get_month_purchases(self):
+        year = datetime.now().year
         mon = datetime.now().month
-        return self.purchase_set.filter(purchase_date__month=mon)
+        return self.purchase_set.filter(purchase_date__year=year, purchase_date__month=mon)
 
 
     def get_month_revenue(self):
@@ -67,6 +60,97 @@ class Customer(models.Model):
         for p in purchases:
             revenue += p.get_total_price()
         return revenue
+
+
+    def get_total_revenue(self):
+        purchases = self.purchase_set.all()
+        revenue = 0
+        for p in purchases:
+            revenue += p.get_total_price()
+        return revenue
+
+
+    @classmethod
+    def get_next_purchase_order_customers(cls, user_id):
+        query = '''
+            select customers_customer.id, customers_customer.name, customers_purchase.name
+            from customers_customer
+            left join (
+              select customers_purchase.customer_id, customers_purchase.name, min(customers_purchase.next_purchase_date) as next_purchase_date
+              from customers_purchase
+              where
+                customers_purchase.user_id={user_id} and
+                customers_purchase.next_purchase_date not null and
+                customers_purchase.is_repurchased=0
+              group by customers_purchase.customer_id
+            ) customers_purchase
+            on customers_customer.id=customers_purchase.customer_id
+            where customers_customer.user_id={user_id}
+            order by customers_purchase.next_purchase_date is null, customers_purchase.next_purchase_date asc, customers_customer.name;
+        '''.format(user_id=user_id)
+
+        return cls.objects.raw(query)
+
+
+    @classmethod
+    def order_by_total_revenue(cls, user_id):
+        query = cls.get_order_by_revenue_query(user_id, use_month_filter=False)
+        return cls.objects.raw(query)
+
+
+    @classmethod
+    def order_by_month_revenue(cls, user_id):
+        query = cls.get_order_by_revenue_query(user_id, use_month_filter=True)
+        return cls.objects.raw(query)
+
+
+    @classmethod
+    def get_order_by_revenue_query(cls, user_id, use_month_filter):
+        if use_month_filter:
+            now = datetime.now()
+            start_day, end_day = calendar.monthrange(now.year, now.month)
+            start = '{0:04d}-{1:02d}-{2:02d}'.format(now.year, now.month, start_day)
+            end = '{0:04d}-{1:02d}-{2:02d}'.format(now.year, now.month, end_day)
+
+            month_filter = '''
+                and customers_purchase.purchase_date > '{start}'
+                and customers_purchase.purchase_date < '{end}'
+            '''.format(start=start, end=end)
+        else:
+            month_filter = ''
+
+        return '''
+            select customers_customer.id, customers_customer.name, customers_purchase.price
+            from customers_customer
+            left join (
+              select customers_purchase.customer_id, sum(customers_purchase.unit_price * customers_purchase.count) as price
+              from customers_purchase
+              where customers_purchase.user_id={user_id} {month_filter}
+              group by customers_purchase.customer_id
+            ) customers_purchase
+            on customers_customer.id=customers_purchase.customer_id
+            where customers_customer.user_id={user_id}
+            order by customers_purchase.price desc, customers_customer.name;
+        '''.format(user_id=user_id, month_filter=month_filter)
+
+
+    @classmethod
+    def order_by_old_contact(cls, user_id):
+        query = '''
+            select customers_customer.id, customers_customer.name, customers_contact.contacted_at
+            from customers_customer
+            left join (
+              select customers_contact.customer_id, customers_contact.memo, max(customers_contact.contacted_at) as contacted_at
+              from customers_contact
+              where customers_contact.user_id={user_id}
+              group by customers_contact.customer_id
+            ) customers_contact
+            on customers_customer.id=customers_contact.customer_id
+            where customers_customer.user_id={user_id}
+            order by customers_contact.contacted_at is null, customers_contact.contacted_at, customers_customer.name;
+        '''.format(user_id=user_id)
+
+        return cls.objects.raw(query)
 
 
 
