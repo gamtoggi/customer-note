@@ -2,10 +2,10 @@
 {% load humanize %}
 
 <div class="padding10box">
-  <form action="">
+  <form class="js-form" action="{% url 'customers:purchases_ajax' customer.pk %}" method="get">
     <div class="field">
       <div class="control has-icons-left">
-        <input type="search" class="input is-rounded is-small" placeholder="구매 기록 검색">
+        <input type="search" class="input is-rounded is-small" name="search" placeholder="제품명 검색" value="{{ search|default:'' }}">
         <span class="icon is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -23,7 +23,8 @@
       </div>
 
     </div>
-    <p><small class="has-text-grey is-size-7">이번 달 {{ month_revenue|default:0|intcomma }}원</small></p>
+    <p><small class="has-text-grey is-size-7 is-pulled-left">이번 달 {{ month_revenue|default:0|intcomma }}원</small></p>
+    <p><small class="has-text-grey is-size-7 is-pulled-right">총 {{ customer.get_total_revenue|intcomma }}원</small></p>
   </div>
 
   <!-- help message -->
@@ -31,13 +32,21 @@
     {% if purchases_count == 0 %}
     <div class="helpbox has-text-centered">
       <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
-      <p class="has-text-grey-light is-size-7">고객이 어떤 품목을 구매했는지 기록하여</p>
+      <p class="has-text-grey-light is-size-7">고객의 구매 이력을 기록하여</p>
       <p class="has-text-grey-light is-size-7">구매 패턴을 파악하고</p>
       <p class="has-text-grey-light is-size-7">다음 구매 일정을 등록하세요.</p>
     </div>
     {% endif %}
+
+    {% if search and purchases.count == 0 %}
+    <div class="helpbox has-text-centered">
+      <p class="has-text-grey is-size-6">검색 결과가 없습니다.</p>
+    </div>
+    {% endif %}
   </div>
 </div>
+
+<div class="brbox"></div>
 
 <!-- form -->
 <div id="js-form-container"></div>
@@ -50,12 +59,24 @@
       <div class="js-partial-btn" data-url="{% url 'customers:purchases_update_ajax' purchase.customer.pk purchase.pk %}" data-target="#js-form-container">
         <div class="js-info-container">
           <div class="info-title">
-            <p><b>{{ purchase.name }}{% if purchase.count > 0 %} ({{ purchase.count }}){% endif %}</b></p>
+            <span><b>{{ purchase.name }}{% if purchase.count > 1 %} ({{ purchase.count }}){% endif %}</b></span>
+            <span class="icon is-pulled-right has-text-grey-light">
+              <i class="fas fa-edit"></i>
+            </span>
           </div>
 
           <p class="info-small">총 {{ purchase.get_total_price|intcomma }}원</p>
           <div class="info-content">
             <p><b>구매일자</b> {{ purchase.purchase_date }}</p>
+
+            {% if purchase.next_purchase_date is not None and purchase.is_repurchased is True %}
+            <span class="has-text-success">
+              <span><b>재구매 완료</b></span>
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+            </span>
+            {% endif %}
 
             {% if purchase.next_purchase_date is not None and purchase.is_repurchased is False %}
             <p><b>재구매 일정</b> {{ purchase.next_purchase_date }}</p>

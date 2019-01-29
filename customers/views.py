@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.db.models import Q
 
 from .models import Customer, Contact, Purchase
 from . import forms
@@ -111,13 +112,13 @@ def customer_info_ajax(request, pk):
 
 @login_required
 def customer_contacts(request, pk):
-    context = get_customer_contacts_context(pk)
+    context = get_customer_contacts_context(request, pk)
     return render(request, 'customers/detail/contacts/index.html', context)
 
 
 @login_required
 def customer_contacts_ajax(request, pk):
-    context = get_customer_contacts_context(pk)
+    context = get_customer_contacts_context(request, pk)
     return render_ajax_response(
         template='customers/detail/contacts/partial/contacts.html',
         context=context)
@@ -172,13 +173,13 @@ def customer_contacts_update_ajax(request, pk, contact_pk):
 
 @login_required
 def customer_purchases(request, pk):
-    context = get_customer_purchases_context(pk)
+    context = get_customer_purchases_context(request, pk)
     return render(request, 'customers/detail/purchases/index.html', context)
 
 
 @login_required
 def customer_purchases_ajax(request, pk):
-    context = get_customer_purchases_context(pk)
+    context = get_customer_purchases_context(request, pk)
     return render_ajax_response(
             template='customers/detail/purchases/partial/purchases.html',
             context=context,
@@ -237,31 +238,48 @@ def customer_purchases_update_ajax(request, pk, purchase_pk):
 
 
 def get_customer_list_context(request):
-    context = {}
-    context['customers'] = []
-    customers = Customer.objects.filter(user=request.user)
     order = request.GET.get('order')
     if order == None:
         order = 'name'
-    context['order'] = order
 
     if order == 'create':
-        object_list = customers.order_by('-created_at')
+        customers =  Customer.objects.filter(user=request.user).order_by('-created_at')
     elif order == 'contact':
-        object_list = Customer.order_by_old_contact(request.user.id)
+        customers = Customer.order_by_old_contact(request.user.id)
     elif order == 'next_purchase':
-        object_list = Customer.get_next_purchase_order_customers(request.user.id)
+        customers = Customer.get_next_purchase_order_customers(request.user.id)
     elif order == 'total_revenue':
-        object_list = Customer.order_by_total_revenue(request.user.id)
+        customers = Customer.order_by_total_revenue(request.user.id)
     elif order == 'month_revenue':
-        object_list = Customer.order_by_month_revenue(request.user.id)
+        customers = Customer.order_by_month_revenue(request.user.id)
     else:
-        object_list = customers.order_by('name')
+        customers = Customer.objects.filter(user=request.user).order_by('name')
 
-    
-    context['customers'] = object_list
-    context['customer_count'] = len(object_list)
-    return context
+    search = request.GET.get('search')
+    if search != None:
+        customers = customers.filter(Q(name__contains=search) | Q(address1__contains=search) | Q(address2__contains=search) | Q(memo__contains=search))
+
+        for customer in customers:
+            if customer.name.find(search) >= 0:
+                customer.search_name = customer.name
+            elif customer.address1 != None and customer.address1.find(search) >= 0:
+                customer.search_match = customer.get_address()
+            elif customer.address2 != None and customer.address2.find(search) >= 0:
+                customer.search_match = customer.get_address()
+            elif customer.memo != None and customer.memo.find(search) >= 0:
+                customer.search_match = customer.memo
+
+            if hasattr(customer, 'search_name'):
+                customer.search_name = customer.search_name.replace(search, '<mark>' + search + '</mark>')
+            elif hasattr(customer, 'search_match'):
+                customer.search_match = customer.search_match.replace(search, '<mark>' + search + '</mark>')
+
+
+    return {
+        'order': order,
+        'search': search,
+        'customers': customers,
+        'customer_count': len(customers) }
 
 
 def get_customer_info_context(pk):
@@ -271,25 +289,37 @@ def get_customer_info_context(pk):
         'tab_active': 'info' }
 
 
-def get_customer_contacts_context(pk):
+def get_customer_contacts_context(request, pk):
     customer = get_object_or_404(Customer,pk=pk)
     contacts = customer.contact_set.order_by('-contacted_at', '-updated_at')
+
+    search = request.GET.get('search')
+    if search != None:
+        contacts = contacts.filter(memo__contains=search)
+
     return {
         'customer': customer,
         'tab_active': 'contacts',
         'contacts': contacts,
-        'contacts_count': customer.contact_set.count() }
+        'contacts_count': customer.contact_set.count(),
+        'search': search }
 
 
-def get_customer_purchases_context(pk):
+def get_customer_purchases_context(request, pk):
     customer = get_object_or_404(Customer,pk=pk)
     purchases = customer.purchase_set.order_by('-purchase_date', '-created_at')
+
+    search = request.GET.get('search')
+    if search != None:
+        purchases = purchases.filter(name__contains=search)
+
     return {
         'customer': customer,
         'tab_active': 'purchases',
         'purchases': purchases,
         'purchases_count': customer.purchase_set.count(),
-        'month_revenue': customer.get_month_revenue() }
+        'month_revenue': customer.get_month_revenue(),
+        'search': search }
 
 
 def render_ajax_response(template=None, request=None, context=None, status=200, errors=None):

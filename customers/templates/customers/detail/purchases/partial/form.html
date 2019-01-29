@@ -40,14 +40,11 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr id="next-purchase-add-container" class="{% if form.next_purchase_date.value != None %}is-hidden{% endif %}">
             <th></th>
             <td>
               <div class="field has-text-right">
-                <label class="checkbox">
-                  <b>재구매 일정 등록</b>
-                  <input type="checkbox" class="checkbox js-toggle-checkbox js-next-purchase-checkbox" data-target=".next-purchase-container" {% if form.next_purchase_date.value != None %}checked{% endif %}>
-                </label>
+                <a id="next-purchase-add">+ 재구매 일정 등록</a>
               </div>
             </td>
           </tr>
@@ -56,6 +53,25 @@
             <td>
               <div class="field">
                 <input type="date" id="js-next-purcase-input"class="input is-small is-fullwidth" name="next_purchase_date" value="{{ form.next_purchase_date.value|date:'Y-m-d' }}">
+              </div>
+            </td>
+          </tr>
+          <tr id="is-repurchased-container" class="field {% if form.next_purchase_date.value == None %}is-hidden{% endif %}">
+            <th></th>
+            <td>
+              <div class="field">
+                <label class="checkbox">
+                  <input id="is-repurchased-checkbox" type="checkbox" class="" name="is_repurchased" {% if form.is_repurchased.value == True %}checked{% endif %}>
+                  재구매 완료
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr id="next-purchase-del-container" class="{% if form.next_purchase_date.value == None %}is-hidden{% endif %}">
+            <th></th>
+            <td>
+              <div class="field has-text-right">
+                <a id="next-purchase-del" class="has-text-danger">+ 재구매 일정 삭제</a>
               </div>
             </td>
           </tr>
@@ -75,6 +91,23 @@
 
 <script>
 $(function(){
+  $('#next-purchase-del').click(function(){
+    $('#js-next-purcase-input').val(null);
+    $('.next-purchase-container').addClass('is-hidden');
+    $('#next-purchase-del-container').addClass('is-hidden');
+    $('#next-purchase-add-container').removeClass('is-hidden');
+    $('#is-repurchased-container').addClass('is-hidden');
+    $('#is-repurchased-checkbox').checked = false;
+  });
+
+  $('#next-purchase-add').click(function(){
+    $('.next-purchase-container').removeClass('is-hidden');
+    $('#next-purchase-del-container').removeClass('is-hidden');
+    $('#next-purchase-add-container').addClass('is-hidden');
+    $('#is-repurchased-container').removeClass('is-hidden');
+  });
+
+
   $('.js-next-purchase-checkbox').change(function(){
     var checked = $(this).is(':checked');
     if (checked == false) {

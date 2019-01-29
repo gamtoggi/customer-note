@@ -1,7 +1,7 @@
 html, body, main {
   /* height: 100%; */
   min-height: 100%;
-  /* background-color: #f7f7f7; */
+  background-color: #fcfffd;
 }
 
 .mainbox {
@@ -9,14 +9,16 @@ html, body, main {
   /* height: 100%; */
   min-height: 100%;
   width: 100%;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
+  margin: auto;
 }
 
 .containerbox {
   width: 580px;
   max-width: 580px;
   background-color: white;
+  margin: auto;
   padding: 15px;
   /* height: 100%; */
   min-height: 100%;
@@ -25,6 +27,8 @@ html, body, main {
 .vborder {
   border-left: 1px solid #efefef;
   border-right: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+
 }
 
 .customer-list-item {
@@ -47,6 +51,7 @@ html, body, main {
 
 .form-box {
   width: 280px;
+  margin: auto;
 }
 
 
@@ -88,6 +93,16 @@ html, body, main {
 .info-table td {
   font-size: 13px;
   border: 0;
+}
+
+
+.info-table-border th {
+  width: 70px;
+  font-size: 14px;
+}
+
+.info-table-border td {
+  font-size: 13px;
 }
 
 .contact-type-dropdown {
@@ -200,12 +215,17 @@ li.is-active span {
 }
 
 
-.fixed-bottom-right-btn {
+.page-back-btn {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 70px;
+  left: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .mt10 {
   margin-top: 10px;
+}
+
+.customer-header-icon {
+  margin-bottom: 15px;
 }

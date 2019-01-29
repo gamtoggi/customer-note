@@ -1,13 +1,20 @@
 
     <!-- top links -->
-    <div class="js-partial-btn" data-url="{% url 'customers:list_ajax' %}" data-target="#page-container">
-      <p class="delete is-pulled-right"></p>
+    <div class="js-partial-btn page-back-btn" data-url="{% url 'customers:list_ajax' %}" data-target="#page-container">
+      <!-- <p class="delete is-pulled-right"></p>
+      <span>닫기</span> -->
+      <button class="button is-small has-shadow">
+        <span class="icon">
+          <i class="fas fa-chevron-left"></i>
+        </span>
+        <span>뒤로</span>
+      </button>
     </div>
 
     <section class="section">
       <!-- customer icon -->
       <div class="has-text-centered">
-        <span class="icon ">
+        <span class="icon customer-header-icon">
           <i class="fas fa-2x fa-user-circle has-text-primary"></i>
         </span>
       </div>
@@ -16,12 +23,13 @@
         <div class="js-edit" data-url="{% url 'customers:update_ajax' customer.pk %}?field=name">
           <div class="js-info-container">
             <span>{{ customer.name|default:'없음' }}</span>
-            <span class="icon">
+            <span class="icon has-text-grey-light">
               <i class="fas fa-edit"></i>
             </span>
           </div>
+          <div class="js-form-container"></div>
         </div>
-        <div class="js-form-container"></div>
+
       </div>
     </section>
 

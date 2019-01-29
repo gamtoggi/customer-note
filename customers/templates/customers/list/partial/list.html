@@ -1,9 +1,10 @@
 {% load humanize %}
 
-<form action="">
+<form class="js-form" action="{% url 'customers:list_ajax' %}" method="get">
+  {% csrf_token %}
   <div class="field">
     <div class="control has-icons-left">
-      <input type="search" class="input is-rounded is-small" placeholder="고객 검색 (이름, 주소, 구매물품, 메모..)">
+      <input type="search" class="input is-rounded is-small" name="search" placeholder="고객 검색 (이름, 주소, 메모)" value="{{ search|default:'' }}">
       <span class="icon is-left">
         <i class="fas fa-search"></i>
       </span>
@@ -20,8 +21,15 @@
 
 <!-- List header -->
 <div class="subsection">
-  <span class="subtitle">고객 목록</span>
+  <span class="subtitle">
+    {% if search %}
+      검색 결과 : "{{search}}"
+    {% else %}
+      고객 목록
+    {% endif %}
+  </span>
 
+  {% if search is None or search == '' %}
   <span class="is-pulled-right">
     <div id="dropdown" class="dropdown is-right">
       <div class="dropdown-trigger">
@@ -58,6 +66,7 @@
       </div>
     </div>
   </span>
+  {% endif %}
 
   <p><small class="has-text-grey">총 {{ customer_count }} 명</small></p>
 
@@ -76,11 +85,17 @@
   </div>
 
   <!-- 도움말 -->
-  {% if customer_count == 0 %}
+  {% if customer_count == 0 and search == None %}
   <div class="helpbox has-text-centered">
     <i class="helpicon far fa-smile-wink fa-3x has-text-grey-lighter"></i>
     <p class="has-text-grey-light is-size-7">안녕하세요. {{ user.username }}님!</p>
     <p class="has-text-grey-light is-size-7">고객을 추가하고, 고객 관리를 시작하세요.</p>
+  </div>
+  {% endif %}
+
+  {% if customer_count == 0 and search != None %}
+  <div class="helpbox has-text-centered">
+    <p class="has-text-grey is-size-6">검색 결과가 없습니다.</p>
   </div>
   {% endif %}
 </div>
@@ -99,7 +114,7 @@
             <span class="icon">
               <i class="fas fa-user-circle fa-lg has-text-primary"></i>
             </span>
-            <b>{{ customer.name }}</b>
+            <b>{{ customer.search_name|default:customer.name|safe }}</b>
 
             {% if order == 'total_revenue'%}
               <small class="has-text-info">(총 {{ customer.get_total_revenue|default:0|intcomma }}원)</small>
@@ -110,47 +125,65 @@
             <small class="is-pulled-right">
               {% with customer.get_last_contact_ago as contact_ago %}
                 {% if contact_ago > 14 %}
-                  <span><i class="fas fa-circle has-text-danger"></i></span>
+                  <span><i class="fas fa-phone has-text-danger"></i></span>
                   연락 {{ contact_ago }}일 전
                 {% elif contact_ago > 7 %}
-                  <span><i class="fas fa-circle has-text-warning"></i></span>
+                  <span><i class="fas fa-phone has-text-warning"></i></span>
                   연락 {{ contact_ago }}일 전
                 {% elif contact_ago > 0 %}
-                    <span><i class="fas fa-circle has-text-success"></i></span>
-                    연락 {{ contact_ago }}일 전
+                  <span><i class="fas fa-phone has-text-success"></i></span>
+                  연락 {{ contact_ago }}일 전
                 {% elif contact_ago == 0 %}
-                  <span><i class="fas fa-circle has-text-success"></i></span>
+                  <span><i class="fas fa-phone has-text-success"></i></span>
                   오늘 연락
                 {% elif contact_ago < 0 %}
-                  <span><i class="fas fa-circle has-text-grey-lighter"></i></span>
+                  <span><i class="fas fa-phone has-text-grey-lighter"></i></span>
                   연락 기록 없음
                 {% endif %}
               {% endwith %}
             </small>
           </div>
+          <!-- Purchase info -->
           <table class="full-table">
           {% with customer.get_waiting_next_purchases as purchases %}
             {% for purchase in purchases %}
+              {% with purchase.get_next_purchase_progress_value as progress_value %}
               <tr>
                 <!-- <th class="has-text-primary">-</th> -->
                 <td>
-                  <small>{{ purchase.name }}</small>
+                  <small>
+                    <span><i class="fas fa-circle
+                    {% if progress_value > 7 %}
+                      has-text-success
+                    {% elif progress_value > 3 %}
+                      has-text-warning
+                    {% else %}
+                      has-text-danger
+                    {% endif %}
+                    "></i></span>
+                    {{ purchase.name }}
+                  </small>
                 </td>
                 <td>
                   <progress class="small-progress progress
-                  {% if purchase.get_next_purchase_progress_value > 7 %}
+                  {% if progress_value > 7 %}
                     is-success
-                  {% elif purchase.get_next_purchase_progress_value > 3 %}
+                  {% elif progress_value > 3 %}
                     is-warning
                   {% else %}
                     is-danger
                   {% endif %}
-                  " value="{{ purchase.get_next_purchase_progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
+                  " value="{{ progress_value }}" max="{{ purchase.get_next_purchase_progress_max }}"></progress>
                 </td>
               </tr>
+              {% endwith %}
             {% endfor %}
           {% endwith %}
           </table>
+          <!-- Search result info -->
+          <div>
+            <small>{{ customer.search_match|safe }}</small>
+          </div>
         </div>
       </div>
       {% endfor %}

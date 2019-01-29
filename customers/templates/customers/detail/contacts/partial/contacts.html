@@ -1,10 +1,10 @@
 {% include '../../common/partial/header.html' %}
 
 <div class="padding10box">
-  <form action="">
+  <form class="js-form" action="{% url 'customers:contacts_ajax' customer.pk %}" method="get">
     <div class="field">
       <div class="control has-icons-left">
-        <input type="search" class="input is-rounded is-small" placeholder="구매 기록 검색">
+        <input type="search" class="input is-rounded is-small" name="search" placeholder="구매 기록 검색" value="{{ search|default:'' }}">
         <span class="icon is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -32,6 +32,12 @@
       <p class="has-text-grey-light is-size-7">고객과 언제 마지막으로 연락했나요?</p>
     </div>
     {% endif %}
+
+    {% if search and contacts.count == 0 %}
+    <div class="helpbox has-text-centered">
+      <p class="has-text-grey is-size-6">검색 결과가 없습니다.</p>
+    </div>
+    {% endif %}
   </div>
 </div>
 
@@ -43,7 +49,14 @@
     {% for contact in contacts %}
     <div class="info-box">
       <div class="js-partial-btn" data-url="{% url 'customers:contacts_update_ajax' contact.customer.pk contact.pk %}" data-target="#js-form-container">
-        <p class="info-title"><b>{{ contact.contacted_at }}</b></p>
+
+        <p class="info-title">
+          <i class="fas fa-phone"></i>
+          <b>{{ contact.contacted_at }}</b>
+          <span class="icon is-pulled-right has-text-grey-light">
+            <i class="fas fa-edit"></i>
+          </span>
+        </p>
         <p class="info-content">{{ contact.memo }}</p>
       </div>
     </div>

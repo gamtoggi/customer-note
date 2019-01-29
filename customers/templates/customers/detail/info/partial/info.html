@@ -15,18 +15,27 @@
 </div>
 
 <!-- info -->
-<section class="section">
-  <table class="table is-fullwidth info-table is-hoverable">
+<section class="subsection">
+  <table class="table is-fullwidth info-table-border is-hoverable">
     {% include './info_row.html' with label='전화' name='phone' value=customer.phone|default:'' %}
     {% include './info_row.html' with label='주소' name='address' value=customer.get_address|default:'' %}
-    {% include './info_row.html' with label='생일' name='birthday' value=customer.birthday|default:'' %}
     {% include './info_row.html' with label='메모' name='memo' value=customer.memo|default:'' %}
   </table>
 
 </section>
 
-<div class="js-partial-btn" data-url="{% url 'customers:delete_ajax' customer.pk %}" data-target="#delete-modal-container">
-  <p class="button is-white is-pulled-right has-text-danger is-small">고객 삭제</p>
+<div class="subsection">
+  <div class="js-partial-btn" data-url="{% url 'customers:delete_ajax' customer.pk %}" data-target="#delete-modal-container">
+    <p class="button is-grey is-small">
+      <span class="icon">
+        <i class="fas fa-trash"></i>
+      </span>
+      <span>고객 삭제</span>
+    </p>
+  </div>
 </div>
+
+
+<div class="brbox"></div>
 
 <div id="delete-modal-container"></div>
