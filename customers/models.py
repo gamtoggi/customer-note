@@ -19,6 +19,11 @@ class Customer(models.Model):
     def __str__(self):
         return '[{}] {} (owner : {})'.format(self.pk, self.name, self.user.username)
 
+    def get_contacts(self):
+        return self.contact_set.order_by('-contacted_at', '-updated_at')
+
+    def get_purchases(self):
+        return self.purchase_set.order_by('-purchase_date', '-created_at')
 
     def get_last_contact(self):
         queryset = self.contact_set.order_by('-contacted_at', '-updated_at')[:1]
@@ -35,8 +40,12 @@ class Customer(models.Model):
         else:
             return -1
 
+
     def get_waiting_next_purchases(self):
-        return self.purchase_set.filter(next_purchase_date__isnull=False, is_repurchased=False).order_by('next_purchase_date')
+        return self.purchase_set \
+                    .filter(next_purchase_date__isnull=False,
+                            is_repurchased=False) \
+                    .order_by('next_purchase_date')
 
 
     def get_address(self):
@@ -71,22 +80,37 @@ class Customer(models.Model):
 
 
     @classmethod
-    def get_next_purchase_order_customers(cls, user_id):
+    def order_by_name(cls, user_id):
+        return cls.objects.filter(user=user_id).order_by('name')
+
+    @classmethod
+    def order_by_created_at(cls, user_id):
+        return cls.objects.filter(user=user_id).order_by('-created_at')
+
+
+    @classmethod
+    def order_by_comming_next_purchase(cls, user_id):
         query = '''
             select customers_customer.id, customers_customer.name, customers_purchase.name
             from customers_customer
             left join (
-              select customers_purchase.customer_id, customers_purchase.name, min(customers_purchase.next_purchase_date) as next_purchase_date
-              from customers_purchase
-              where
-                customers_purchase.user_id={user_id} and
-                customers_purchase.next_purchase_date not null and
-                customers_purchase.is_repurchased=0
-              group by customers_purchase.customer_id
+                select
+                    customers_purchase.customer_id,
+                    customers_purchase.name,
+                    min(customers_purchase.next_purchase_date) as next_purchase_date
+                from customers_purchase
+                where
+                    customers_purchase.user_id={user_id} and
+                    customers_purchase.next_purchase_date not null and
+                    customers_purchase.is_repurchased=0
+                group by customers_purchase.customer_id
             ) customers_purchase
             on customers_customer.id=customers_purchase.customer_id
             where customers_customer.user_id={user_id}
-            order by customers_purchase.next_purchase_date is null, customers_purchase.next_purchase_date asc, customers_customer.name;
+            order by
+                customers_purchase.next_purchase_date is null,
+                customers_purchase.next_purchase_date asc,
+                customers_customer.name;
         '''.format(user_id=user_id)
 
         return cls.objects.raw(query)
@@ -157,7 +181,7 @@ class Customer(models.Model):
 class Contact(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    contacted_at = models.DateField()
+    contacted_at = models.DateField(default=datetime.now)
     memo = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)

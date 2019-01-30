@@ -65,3 +65,19 @@ class PurchaseIsRepurchasedForm(forms.ModelForm):
     class Meta:
         model = Purchase
         fields = ('is_repurchased', )
+
+
+def get_customer_partial_form_class(field):
+    if field == 'name':
+        return CustomerNameForm
+    elif field == 'phone':
+        return CustomerPhoneForm
+    elif field == 'kakao':
+        return CustomerKakaoForm
+    elif field == 'address':
+        return CustomerAddressForm
+    elif field == 'birthday':
+        return CustomerBirthdayForm
+    elif field == 'memo':
+        return CustomerMemoForm
+    return None
