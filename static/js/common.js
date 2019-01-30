@@ -150,6 +150,9 @@ $(function(){
           alert('죄송합니다. 데이터를 저장하지 못했습니다.');
           console.log(data.errors);
         }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('죄송합니다. 데이터를 저장하지 못했습니다.');
       }
     });
     return false;

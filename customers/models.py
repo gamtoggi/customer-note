@@ -194,7 +194,7 @@ class Purchase(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     count = models.PositiveSmallIntegerField(default=1)
-    unit_price = models.PositiveSmallIntegerField(default=0)
+    unit_price = models.PositiveIntegerField(default=0)
     purchase_date = models.DateField(default=datetime.now)
     next_purchase_date = models.DateField(null=True, blank=True)
     is_repurchased = models.BooleanField(default=False)

@@ -12,7 +12,7 @@
             <th class="purchase">제품명</th>
             <td>
               <div class="field">
-                <input type="text" class="input is-small is-fullwidth" name="name" value="{{ form.name.value|default:'' }}">
+                <input type="text" class="input is-small is-fullwidth" name="name" value="{{ form.name.value|default:'' }}" required>
               </div>
             </td>
           </tr>
@@ -20,7 +20,7 @@
             <th>수량</th>
             <td>
               <div class="field">
-                <input type="number" class="input is-small is-fullwidth" name="count" value="{{ form.count.value }}">
+                <input type="number" class="input is-small is-fullwidth" name="count" value="{{ form.count.value }}" required>
               </div>
             </td>
           </tr>
@@ -28,7 +28,7 @@
             <th>단가</th>
             <td>
               <div class="field">
-                <input type="number" class="input is-small is-fullwidth" name="unit_price" value="{{ form.unit_price.value }}">
+                <input type="number" class="input is-small is-fullwidth" name="unit_price" value="{{ form.unit_price.value }}" required>
               </div>
             </td>
           </tr>
@@ -36,7 +36,7 @@
             <th>구매일자</th>
             <td>
               <div class="field">
-                <input type="date" class="input is-small is-fullwidth" name="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d' }}">
+                <input type="date" class="input is-small is-fullwidth" name="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d' }}" required>
               </div>
             </td>
           </tr>
