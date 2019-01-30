@@ -4,7 +4,7 @@
   {% csrf_token %}
   <div class="field">
     <div class="control has-icons-left">
-      <input type="search" class="input is-rounded is-small" name="search" placeholder="고객 검색 (이름, 주소, 메모)" value="{{ search|default:'' }}">
+      <input type="search" class="input is-rounded" name="search" placeholder="고객 검색 (이름, 주소, 메모)" value="{{ search|default:'' }}">
       <span class="icon is-left">
         <i class="fas fa-search"></i>
       </span>
@@ -77,12 +77,24 @@
 
 
 <div class="padding10box">
-  <!-- 고객 추가 버튼 -->
-  <div class="fixed-bottom-right-btn2">
-    <div class="js-partial-btn" data-url="{% url 'customers:create_ajax' %}" data-target="#form-container">
-      <a class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
+
+  {% if search %}
+    <!-- 검색 결과 지우기 -->
+    <a class="button js-partial-btn" data-url="{% url 'customers:list_ajax' %}?search=" data-target="#page-container">
+      <span class="icon">
+        <i class="fas fa-times"></i>
+      </span>
+      <span>검색 결과 지우기</span>
+    </a>
+  {% else %}
+    <!-- 고객 추가 버튼 -->
+    <div class="fixed-bottom-right-btn2">
+      <div class="js-partial-btn" data-url="{% url 'customers:create_ajax' %}" data-target="#form-container">
+        <a class="has-text-weight-bold has-text-primary">+ 고객 추가</a>
+      </div>
     </div>
-  </div>
+  {% endif %}
+
 
   <!-- 도움말 -->
   {% if customer_count == 0 and search == None %}

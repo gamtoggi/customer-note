@@ -4,7 +4,7 @@
   <form class="js-form" action="{% url 'customers:contacts_ajax' customer.pk %}" method="get">
     <div class="field">
       <div class="control has-icons-left">
-        <input type="search" class="input is-rounded is-small" name="search" placeholder="구매 기록 검색" value="{{ search|default:'' }}">
+        <input type="search" class="input is-rounded" name="search" placeholder="구매 기록 검색" value="{{ search|default:'' }}">
         <span class="icon is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -15,12 +15,22 @@
 
 <!-- Add Customer -->
 <div class="padding10box">
-  <div class="container">
-    <div class="js-partial-btn" data-url="{% url 'customers:contacts_create_ajax' customer.pk %}" data-target="#js-form-container">
-      <a class="has-text-weight-bold has-text-primary">+ 연락 기록 추가</a>
+  {% if search %}
+  <!-- 검색 결과 지우기 -->
+    <a class="button js-partial-btn" data-url="{% url 'customers:contacts_ajax' customer.pk %}?search=" data-target="#page-container">
+      <span class="icon">
+        <i class="fas fa-times"></i>
+      </span>
+      <span>검색 결과 지우기</span>
+    </a>
+  {% else %}
+    <div class="container">
+      <div class="js-partial-btn" data-url="{% url 'customers:contacts_create_ajax' customer.pk %}" data-target="#js-form-container">
+        <a class="has-text-weight-bold has-text-primary">+ 연락 기록 추가</a>
+      </div>
+      <p><small class="has-text-grey is-size-7">총 {{ contacts_count|default:0 }} 건</small></p>
     </div>
-    <p><small class="has-text-grey is-size-7">총 {{ contacts_count|default:0 }} 건</small></p>
-  </div>
+  {% endif %}
 
   <!-- help message -->
   <div id="help-container">

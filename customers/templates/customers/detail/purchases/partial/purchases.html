@@ -5,7 +5,7 @@
   <form class="js-form" action="{% url 'customers:purchases_ajax' customer.pk %}" method="get">
     <div class="field">
       <div class="control has-icons-left">
-        <input type="search" class="input is-rounded is-small" name="search" placeholder="제품명 검색" value="{{ search|default:'' }}">
+        <input type="search" class="input is-rounded" name="search" placeholder="제품명 검색" value="{{ search|default:'' }}">
         <span class="icon is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -16,16 +16,27 @@
 
 <!-- Add Purchase -->
 <div class="padding10box">
-  <div class="container">
-    <div class="js-partial-btn" data-url="{% url 'customers:purchases_create_ajax' customer.pk %}" data-target="#js-form-container">
-      <div class="js-hide-btn" data-target="#help-container">
-        <a class="has-text-weight-bold has-text-primary">+ 구매 기록 추가</a>
-      </div>
 
+  {% if search %}
+  <!-- 검색 결과 지우기 -->
+    <a class="button js-partial-btn" data-url="{% url 'customers:purchases_ajax' customer.pk %}?search=" data-target="#page-container">
+      <span class="icon">
+        <i class="fas fa-times"></i>
+      </span>
+      <span>검색 결과 지우기</span>
+    </a>
+  {% else %}
+    <div class="container">
+      <div class="js-partial-btn" data-url="{% url 'customers:purchases_create_ajax' customer.pk %}" data-target="#js-form-container">
+        <div class="js-hide-btn" data-target="#help-container">
+          <a class="has-text-weight-bold has-text-primary">+ 구매 기록 추가</a>
+        </div>
+
+      </div>
+      <p><small class="has-text-grey is-size-7 is-pulled-left">이번 달 {{ month_revenue|default:0|intcomma }}원</small></p>
+      <p><small class="has-text-grey is-size-7 is-pulled-right">총 {{ customer.get_total_revenue|intcomma }}원</small></p>
     </div>
-    <p><small class="has-text-grey is-size-7 is-pulled-left">이번 달 {{ month_revenue|default:0|intcomma }}원</small></p>
-    <p><small class="has-text-grey is-size-7 is-pulled-right">총 {{ customer.get_total_revenue|intcomma }}원</small></p>
-  </div>
+  {% endif %}
 
   <!-- help message -->
   <div id="help-container">

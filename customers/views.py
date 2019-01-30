@@ -250,13 +250,25 @@ def customer_purchases_update_ajax(request, pk, purchase_pk):
             return render_ajax_response(status=400, errors=form.errors)
 
 
+def get_from_param_or_session(request, key):
+    value = request.GET.get(key)
+    if value == None:
+        value = request.session.get(key)
+
+    if value != None:
+        request.session[key] = value
+
+    return value
+
+
+
 def get_customer_list_context(request):
     '''고객 목록 context 반환
     order 쿼리값에 따라 고객 목록을 정렬하거나
     search 쿼리값에 따라 고객을 검색하여 고객 목록을 만든다.
     '''
-    order = request.GET.get('order')
-    search = request.GET.get('search')
+    order = get_from_param_or_session(request, 'order')
+    search = get_from_param_or_session(request, 'search')
 
     if search != None:
         customers = Customer.order_by_name(request.user.id).filter(
