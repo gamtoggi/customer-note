@@ -270,7 +270,7 @@ def get_customer_list_context(request):
     order = get_from_param_or_session(request, 'order')
     search = get_from_param_or_session(request, 'search')
 
-    if search != None:
+    if search != None and search.strip() != '':
         customers = Customer.order_by_name(request.user.id).filter(
                         Q(name__contains=search) |
                         Q(address1__contains=search) |
