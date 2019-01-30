@@ -81,27 +81,26 @@ class Customer(models.Model):
 
     @classmethod
     def order_by_name(cls, user_id):
-        return cls.objects.filter(user=user_id).order_by('name')
+        return cls.objects.filter(user_id=user_id).order_by('name')
 
     @classmethod
     def order_by_created_at(cls, user_id):
-        return cls.objects.filter(user=user_id).order_by('-created_at')
+        return cls.objects.filter(user_id=user_id).order_by('-created_at')
 
 
     @classmethod
     def order_by_comming_next_purchase(cls, user_id):
         query = '''
-            select customers_customer.id, customers_customer.name, customers_purchase.name
+            select customers_customer.id
             from customers_customer
             left join (
                 select
                     customers_purchase.customer_id,
-                    customers_purchase.name,
                     min(customers_purchase.next_purchase_date) as next_purchase_date
                 from customers_purchase
                 where
                     customers_purchase.user_id={user_id} and
-                    customers_purchase.next_purchase_date not null and
+                    customers_purchase.next_purchase_date is not null and
                     customers_purchase.is_repurchased=0
                 group by customers_purchase.customer_id
             ) customers_purchase
@@ -137,14 +136,14 @@ class Customer(models.Model):
             end = '{0:04d}-{1:02d}-{2:02d}'.format(now.year, now.month, end_day)
 
             month_filter = '''
-                and customers_purchase.purchase_date > '{start}'
-                and customers_purchase.purchase_date < '{end}'
+                and customers_purchase.purchase_date >= '{start}'
+                and customers_purchase.purchase_date <= '{end}'
             '''.format(start=start, end=end)
         else:
             month_filter = ''
 
         return '''
-            select customers_customer.id, customers_customer.name, customers_purchase.price
+            select customers_customer.id
             from customers_customer
             left join (
               select customers_purchase.customer_id, sum(customers_purchase.unit_price * customers_purchase.count) as price
@@ -161,10 +160,10 @@ class Customer(models.Model):
     @classmethod
     def order_by_old_contact(cls, user_id):
         query = '''
-            select customers_customer.id, customers_customer.name, customers_contact.contacted_at
+            select customers_customer.id
             from customers_customer
             left join (
-              select customers_contact.customer_id, customers_contact.memo, max(customers_contact.contacted_at) as contacted_at
+              select customers_contact.customer_id, max(customers_contact.contacted_at) as contacted_at
               from customers_contact
               where customers_contact.user_id={user_id}
               group by customers_contact.customer_id
