@@ -3,7 +3,7 @@
 할 수 있는 웹 애플리케이션
 
 ## Available at
-[CustomerNote.net](customernote.net)
+[CustomerNote.net](http://customernote.net)
 
 ## Skills
 ### Backend
