@@ -23,10 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 with open(os.path.join(BASE_DIR, 'mysite', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
+with open(os.path.join(BASE_DIR, 'mysite', 'dbpassword.txt')) as f:
+    DBPASSWORD = f.read().strip()
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['customernote.net', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ysapp.co.kr', 'csnote.ysapp.co.kr', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -85,8 +88,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'mariadb',
+        'NAME': 'customernote',
+        'PASSWORD': DBPASSWORD,
+        'PORT': '3306',
+        'USER': 'root'
     }
 }
 

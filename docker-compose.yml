@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+    nginx:
+        build: 
+            context: ./
+            dockerfile: Dockerfile_nginx
+        image: nginx
+        container_name: nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+            - /etc/letsencrypt/live/csnote.ysapp.co.kr/fullchain.pem:/ssl/fullchain.pem
+            - /etc/letsencrypt/live/csnote.ysapp.co.kr/privkey.pem:/ssl/privkey.pem
+            - /etc/letsencrypt/options-ssl-nginx.conf:/ssl/ssl-nginx.conf
+            - /etc/letsencrypt/ssl-dhparams.pem:/ssl/ssl-dhparams.pem
+    
+    mariadb:
+        build:
+            context: ./
+            dockerfile: Dockerfile_mariadb
+        image: mariadb
+        container_name: mariadb
+        ports:
+            - 3306:3306
+        volumes: 
+            - ./mariadb/my.cnf:/etc/mysql/my.cnf
+            - /home/joylucky/db/customer-note:/var/lib/mysql
+
+    customernote:
+        build:
+            context: ./
+            dockerfile: Dockerfile_customernote
+        image: customernote
+        container_name: customernote
+        ports:
+            - 5000:5000
+            - 8000:8000
+              #volumes: 
+              #- ./uwsgi/uwsgi.ini:/opt/uwsgi.ini
+              #command: uwsgi --ini /opt/uwsgi/uwsgi.ini
+
+
+
