@@ -3,17 +3,22 @@
 할 수 있는 웹 애플리케이션
 
 ## Available at
-[CustomerNote.net](http://customernote.net)
+[csnote.ysapp.co.kr](https://csnote.ysapp.co.kr)
 
 ## Skills
+### Deploy
+Docker on Centos8
+  - Nginx container
+  - uWSGI python container
+  - MariaDB container
 ### Backend
-Django
+Python/Django
 ### Frontend
 jQuery, Ajax, Bulma(css)
 ### DB
-Mysql
+MariaDB
 ### Server
-Amazon EC2, Nginx, uWSGI
+Nginx, uWSGI
 
 ## 주요 기능
 * 회원 가입/로그인
